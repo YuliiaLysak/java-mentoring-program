@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.exam_results</OriginalElement>
+  <nodes>
+    <node x="332.5" y="72.5">691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.tutors</node>
+    <node x="-43.0" y="370.0">691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.exam_results</node>
+    <node x="-81.0" y="11.5">691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.students</node>
+    <node x="339.0" y="381.0">691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.subjects</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.exam_results" target="691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.students" relationship="REFERENCES">
+      <point x="-37.0" y="-61.0" />
+      <point x="-6.0" y="429.0" />
+      <point x="31.0" y="429.0" />
+      <point x="0.0" y="105.0" />
+    </edge>
+    <edge source="691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.exam_results" target="691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.subjects" relationship="REFERENCES">
+      <point x="37.0" y="-61.0" />
+      <point x="68.0" y="429.0" />
+      <point x="444.5" y="429.0" />
+      <point x="0.0" y="50.0" />
+    </edge>
+    <edge source="691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.subjects" target="691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.tutors" relationship="REFERENCES">
+      <point x="0.0" y="-50.0" />
+      <point x="0.0" y="72.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="231.0" y="288.0" />
+  <SelectedNodes>
+    <node>691aee42-8682-4931-8d88-3aa28ae5b267.TABLE:mentoring_program.public.tutors</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
