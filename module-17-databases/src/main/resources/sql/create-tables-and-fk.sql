@@ -71,3 +71,23 @@ ALTER TABLE IF EXISTS exam_results
             ON
                 DELETE
                 RESTRICT;
+
+-- 6. Add validation on DB level that will check username
+-- on special characters (reject student name with next
+-- characters '@', '#', '$').
+
+ALTER TABLE students
+    ADD CONSTRAINT name_surname_check
+        CHECK (
+                name ~ '^[^@#$]+$'
+                AND surname ~ '^[^@#$]+$'
+            );
+
+INSERT INTO students(name, surname, date_of_birth, phone_number, primary_skill, created_datetime, updated_datetime)
+ VALUES ('John$', 'Dow#', now(), '2-677-377-8850', 'English', now(), now());
+
+SELECT * FROM students WHERE id = 100003;
+
+-- from console:
+-- [2022-02-22 21:04:08] [23514] ERROR: new row for relation "students" violates check constraint "name_surname_check"
+-- [2022-02-22 21:04:08] Detail: Failing row contains (100001, John$, Dow#, 2022-02-22 19:04:08.938862, 2-677-377-8850, English, 2022-02-22 19:04:08.938862, 2022-02-22 19:04:08.938862).

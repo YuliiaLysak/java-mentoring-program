@@ -31,7 +31,8 @@ FROM students st
 WHERE surname LIKE 'Greg%';
 
 
--- 5. Add trigger that will update column updated_datetime to current date in case of updating any of student. (0.3 point)
+-- 5. Add trigger that will update column updated_datetime
+-- to current date in case of updating any of student.
 CREATE OR REPLACE FUNCTION upd_datetime()
 RETURNS TRIGGER AS $$
    BEGIN
