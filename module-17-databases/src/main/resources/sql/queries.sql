@@ -50,3 +50,26 @@ SELECT * FROM students WHERE id = 1;
 UPDATE students
 SET primary_skill = 'Health'
 WHERE id = 1;
+
+-- 7. Create snapshot that will contain next data:
+-- student name, student surname, subject name, mark
+-- (snapshot means that in case of changing some data in source table –
+-- your snapshot should not change).
+
+SELECT st.name,
+       st.surname,
+       su.subject_name,
+       er.mark
+INTO TABLE students_marks_snapshot
+FROM students st
+         INNER JOIN exam_results er ON st.id = er.student_id
+         INNER JOIN subjects su ON su.id = er.subject_id;
+
+CREATE MATERIALIZED VIEW mv_students_marks AS
+SELECT st.name,
+       st.surname,
+       su.subject_name,
+       er.mark
+FROM students st
+         INNER JOIN exam_results er ON st.id = er.student_id
+         INNER JOIN subjects su ON su.id = er.subject_id;
