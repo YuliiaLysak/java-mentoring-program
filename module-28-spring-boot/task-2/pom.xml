@@ -11,11 +11,6 @@
 
     <artifactId>task-2</artifactId>
 
-    <properties>
-        <lombok.version>1.18.20</lombok.version>
-        <h2.version>1.4.200</h2.version>
-    </properties>
-
     <dependencies>
 
         <dependency>
