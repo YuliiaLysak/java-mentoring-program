@@ -14,10 +14,11 @@
     <packaging>pom</packaging>
     <modules>
         <module>task-1</module>
+        <module>task-2</module>
     </modules>
 
     <properties>
-        <spring-boot.version>2.6.3</spring-boot.version>
+        <spring-boot.version>2.6.4</spring-boot.version>
     </properties>
 
     <dependencies>

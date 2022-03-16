@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+#datasource settings
+spring:
+  datasource:
+    url: jdbc:h2:file:./module-28-spring-boot/task-2/mentoring_recipes_db
+    driverClassName: org.h2.Driver
+#   TODO: never commit password!!!!!!! this one is only for testing purpose
+    username: abc123
+    password: abc123
+
+#data settings
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create
+#    show-sql: true
+
+#console settings
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        trace: false
