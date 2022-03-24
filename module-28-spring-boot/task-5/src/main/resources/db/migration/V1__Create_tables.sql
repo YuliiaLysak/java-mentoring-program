@@ -9,31 +9,31 @@ create table recipes
     primary key (id)
 );
 
-create table ingredients
+create table products
 (
     id   bigserial    not null,
     name varchar(255) not null,
     primary key (id)
 );
 
-create table recipes_ingredients
+create table ingredients
 (
     id               bigserial    not null,
     recipe_id        int8         not null,
-    ingredient_id    int8         not null,
+    product_id    int8         not null,
     quantity         float8       not null,
     measurement_unit varchar(255) not null,
     primary key (id)
 );
 
-alter table recipes_ingredients
+alter table ingredients
     add constraint fk_recipe_id
         foreign key (recipe_id)
             references recipes
             on delete cascade;
 
-alter table recipes_ingredients
-    add constraint fk_ingredient_id
-        foreign key (ingredient_id)
-            references ingredients
+alter table ingredients
+    add constraint fk_product_id
+        foreign key (product_id)
+            references products
             on delete cascade;

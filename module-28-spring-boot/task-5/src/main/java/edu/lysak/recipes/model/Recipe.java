@@ -35,7 +35,7 @@ public class Recipe {
 
     @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name="recipe_id", referencedColumnName="id")
-    private List<RecipesIngredients> ingredients;
+    private List<Ingredient> ingredients;
 
     private String directions;
 }
