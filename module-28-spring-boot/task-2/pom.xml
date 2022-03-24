@@ -11,6 +11,10 @@
 
     <artifactId>task-2</artifactId>
 
+    <properties>
+        <prometheus.version>1.8.4</prometheus.version>
+    </properties>
+
     <dependencies>
 
         <dependency>
@@ -36,6 +40,18 @@
             <version>${h2.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <!-- Micrometer Prometheus registry - for actuator  -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>${prometheus.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
