@@ -1,5 +1,6 @@
 package edu.lysak.recipes.service;
 
+import edu.lysak.recipes.exception.RecipeNotFoundException;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.repository.RecipeRepository;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,7 @@ public class RecipeService {
 
     private Recipe getRecipeFromDb(Long recipeId) {
         return recipeRepository.findById(recipeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new RecipeNotFoundException(String.format("Recipe with id=%s not found", recipeId)));
     }
 
     private void mapRecipe(Recipe recipe, Recipe oldRecipe) {

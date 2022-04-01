@@ -2,6 +2,8 @@ package edu.lysak.recipes.service;
 
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.repository.ProductRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsArgAt;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -27,6 +28,7 @@ class ProductServiceTest {
     private ProductRepository productRepository;
 
     @Test
+    @DisplayName("#getProductByName(String) should successfully get existing product")
     void getProductByName_shouldSuccessfullyGetProduct() {
         Product product = new Product("milk");
         when(productRepository.findByName(any())).thenReturn(Optional.of(product));
@@ -38,30 +40,39 @@ class ProductServiceTest {
         assertEquals("milk", productFromDb.get().getName());
     }
 
-    @Test
-    void saveAndGetProduct_shouldGetExistingProduct() {
-        Product product = new Product("milk");
-        when(productRepository.findByName(any())).thenReturn(Optional.of(product));
+    @Nested
+    @DisplayName("#saveAndGetProduct(String)")
+    class SaveAndGetProductMethodTest {
 
-        Product productFromDb = productService.saveAndGetProduct("milk");
+        @Test
+        @DisplayName("should successfully get existing product")
+        void saveAndGetProduct_shouldGetExistingProduct() {
+            Product product = new Product("milk");
+            when(productRepository.findByName(any())).thenReturn(Optional.of(product));
 
-        verify(productRepository).findByName("milk");
-        assertEquals("milk", productFromDb.getName());
+            Product productFromDb = productService.saveAndGetProduct("milk");
+
+            verify(productRepository).findByName("milk");
+            verify(productRepository, never()).save(any());
+            assertEquals("milk", productFromDb.getName());
+        }
+
+        @Test
+        @DisplayName("should successfully add new product")
+        void saveAndGetProduct_shouldAddNewProduct() {
+            when(productRepository.findByName(any())).thenReturn(Optional.empty());
+            when(productRepository.save(any())).thenAnswer(returnsArgAt(0));
+
+            Product savedProduct = productService.saveAndGetProduct("milk");
+
+            verify(productRepository).findByName("milk");
+            verify(productRepository).save(savedProduct);
+            assertEquals("milk", savedProduct.getName());
+        }
     }
 
     @Test
-    void saveAndGetProduct_shouldAddNewProduct() {
-        when(productRepository.findByName(any())).thenReturn(Optional.empty());
-        when(productRepository.save(any())).thenAnswer(returnsArgAt(0));
-
-        Product savedProduct = productService.saveAndGetProduct("milk");
-
-        verify(productRepository).findByName("milk");
-        verify(productRepository).save(savedProduct);
-        assertEquals("milk", savedProduct.getName());
-    }
-
-    @Test
+    @DisplayName("#addProduct(Product) should successfully save new product")
     void addProduct_shouldSuccessfullySaveProduct() {
         Product product = new Product("milk");
         when(productRepository.save(any())).thenAnswer(returnsArgAt(0));

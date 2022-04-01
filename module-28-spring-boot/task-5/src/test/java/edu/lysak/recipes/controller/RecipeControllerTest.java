@@ -5,6 +5,8 @@ import edu.lysak.recipes.TestUtil;
 import edu.lysak.recipes.dto.RecipeDto;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.service.RecipeService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -40,74 +42,87 @@ class RecipeControllerTest {
     @MockBean
     private RecipeService recipeService;
 
-    @Test
-    void getRecipe_shouldSuccessfullyReturnRecipe() throws Exception {
-        Recipe expectedRecipe = TestUtil.getMockedRecipe();
-        when(recipeService.getRecipe(any())).thenReturn(expectedRecipe);
+    @Nested
+    @DisplayName("#getRecipe(Long)")
+    class GetRecipeMethodTest {
+
+        @Test
+        @DisplayName("should successfully return recipe")
+        void getRecipe_shouldSuccessfullyReturnRecipe() throws Exception {
+            Recipe expectedRecipe = TestUtil.getMockedRecipe();
+            when(recipeService.getRecipe(any())).thenReturn(expectedRecipe);
 
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/recipe/{id}", 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value("Warming Ginger Tea"))
-                .andExpect(jsonPath("category").value("beverage"))
+            MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipe/{id}", 1)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("name").value("Warming Ginger Tea"))
+                    .andExpect(jsonPath("category").value("beverage"))
 //      OR          .andExpect(responseBody().containsObjectAsJson(expectedRecipe, Recipe.class));
-                .andReturn();
+                    .andReturn();
 
-        assertEquals(mvcResult.getResponse().getContentAsString(), objectMapper.writeValueAsString(expectedRecipe));
+            assertEquals(mvcResult.getResponse().getContentAsString(), objectMapper.writeValueAsString(expectedRecipe));
+        }
+
+        @Test
+        @DisplayName("should return 404 (not found) if recipe not found")
+        void getRecipe_shouldReturn404ifRecipeNotFound() throws Exception {
+            when(recipeService.getRecipe(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/recipe/{id}", 1))
+                    .andExpect(status().isNotFound());
+        }
     }
 
-    @Test
-    void getRecipe_shouldReturn404ifRecipeNotFound() throws Exception {
-        when(recipeService.getRecipe(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+    @Nested
+    @DisplayName("#addRecipe(RecipeDto)")
+    class AddRecipeMethodTest {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/recipe/{id}", 1))
-                .andExpect(status().isNotFound());
-    }
+        @Test
+        @DisplayName("should successfully add new recipe and return it's id")
+        void addRecipe_shouldAddRecipeAndReturnId() throws Exception {
+            when(recipeService.addRecipe(any())).thenReturn(1L);
 
-    @Test
-    void addRecipe_shouldAddRecipeAndReturnId() throws Exception {
-        when(recipeService.addRecipe(any())).thenReturn(1L);
+            RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
+            mockMvc.perform(
+                            MockMvcRequestBuilders
+                                    .post("/api/recipe/new")
+                                    .content(objectMapper.writeValueAsString(recipeDto))
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("id").value(1L));
 
-        RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .post("/api/recipe/new")
-                                .content(objectMapper.writeValueAsString(recipeDto))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(1L));
+            ArgumentCaptor<RecipeDto> recipeCaptor = ArgumentCaptor.forClass(RecipeDto.class);
+            verify(recipeService).addRecipe(recipeCaptor.capture());
+            assertEquals(recipeCaptor.getValue().getName(), recipeDto.getName());
+            assertEquals(recipeCaptor.getValue().getCategory(), recipeDto.getCategory());
+            assertEquals(recipeCaptor.getValue().getDirections(), recipeDto.getDirections());
+            assertEquals(recipeCaptor.getValue().getDescription(), recipeDto.getDescription());
+        }
 
-        ArgumentCaptor<RecipeDto> recipeCaptor = ArgumentCaptor.forClass(RecipeDto.class);
-        verify(recipeService).addRecipe(recipeCaptor.capture());
-        assertEquals(recipeCaptor.getValue().getName(), recipeDto.getName());
-        assertEquals(recipeCaptor.getValue().getCategory(), recipeDto.getCategory());
-        assertEquals(recipeCaptor.getValue().getDirections(), recipeDto.getDirections());
-        assertEquals(recipeCaptor.getValue().getDescription(), recipeDto.getDescription());
-    }
-
-    // testing @Valid annotation with @NotBlank
-    @Test
-    void addRecipe_whenNullValue_thenReturns400() throws Exception {
-        RecipeDto invalidRecipeDto = RecipeDto.builder()
-                .category("beverage")
-                .description("description")
-                .ingredientsDto(List.of(TestUtil.getIngredientDto()))
-                .directions("directions")
-                .build();
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .post("/api/recipe/new")
-                                .content(objectMapper.writeValueAsString(invalidRecipeDto))
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(responseBody().containsError("name", "Name should not be blank"));
+        // testing @Valid annotation with @NotBlank
+        @Test
+        @DisplayName("should return 400 (bad request) if dto is invalid")
+        void addRecipe_whenNullValue_thenReturns400() throws Exception {
+            RecipeDto invalidRecipeDto = RecipeDto.builder()
+                    .category("beverage")
+                    .description("description")
+                    .ingredientsDto(List.of(TestUtil.getIngredientDto()))
+                    .directions("directions")
+                    .build();
+            mockMvc.perform(
+                            MockMvcRequestBuilders
+                                    .post("/api/recipe/new")
+                                    .content(objectMapper.writeValueAsString(invalidRecipeDto))
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isBadRequest())
+                    .andExpect(responseBody().containsError("name", "Name should not be blank"));
 
 //
 //              OR
@@ -118,9 +133,11 @@ class RecipeControllerTest {
 //        String actualResponseBody = mvcResult.getResponse().getContentAsString();
 //        String expectedResponseBody = objectMapper.writeValueAsString(expectedErrorResponse);
 //        assertEquals(expectedResponseBody, actualResponseBody);
+        }
     }
 
     @Test
+    @DisplayName("#deleteRecipe(Long) should successfully delete recipe and return 204 (no content)")
     void deleteRecipe_shouldDeleteRecipeAndReturnNoContentStatus() throws Exception {
         doNothing().when(recipeService).deleteRecipe(any());
 
@@ -129,6 +146,7 @@ class RecipeControllerTest {
     }
 
     @Test
+    @DisplayName("#updateRecipe(Long, RecipeDto) should successfully update recipe and return 204 (no content)")
     void updateRecipe_shouldUpdateRecipeAndReturnNoContentStatus() throws Exception {
         doNothing().when(recipeService).updateRecipe(any(), any());
 
@@ -141,38 +159,46 @@ class RecipeControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    @ParameterizedTest
-    @CsvSource({"category, beverage", "name, 'Warming Ginger Tea'"})
-    void searchRecipes_shouldReturnListOfRecipesWithSpecificRequestParam(String paramName, String paramValue) throws Exception {
-        when(recipeService.getRecipesByCategory(any())).thenReturn(List.of(TestUtil.getMockedRecipe()));
-        when(recipeService.getRecipesByName(any())).thenReturn(List.of(TestUtil.getMockedRecipe()));
+    @Nested
+    @DisplayName("#searchRecipes(String, String)")
+    class SearchRecipesMethodTest {
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/recipe/search")
-                        .param(paramName, paramValue)
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].name").value("Warming Ginger Tea"))
-                .andExpect(jsonPath("$.[0].category").value("beverage"));
-    }
+        @ParameterizedTest
+        @CsvSource({"category, beverage", "name, 'Warming Ginger Tea'"})
+        @DisplayName("should successfully return list of recipes for particular category/name")
+        void searchRecipes_shouldReturnListOfRecipesWithSpecificRequestParam(String paramName, String paramValue) throws Exception {
+            when(recipeService.getRecipesByCategory(any())).thenReturn(List.of(TestUtil.getMockedRecipe()));
+            when(recipeService.getRecipesByName(any())).thenReturn(List.of(TestUtil.getMockedRecipe()));
 
-    @Test
-    void searchRecipes_shouldThrowExceptionIfNoRequestParam() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipe/search")
+                            .param(paramName, paramValue)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.[0].name").value("Warming Ginger Tea"))
+                    .andExpect(jsonPath("$.[0].category").value("beverage"));
+        }
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/recipe/search")
-                )
-                .andExpect(status().isBadRequest());
-    }
+        @Test
+        @DisplayName("should return 400 (bad request) if no request parameters are provided")
+        void searchRecipes_shouldThrowExceptionIfNoRequestParam() throws Exception {
 
-    @Test
-    void searchRecipes_shouldThrowExceptionIfBothRequestParam() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipe/search")
+                    )
+                    .andExpect(status().isBadRequest());
+        }
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/recipe/search")
-                        .param("category", "beverage")
-                        .param("name", "tea")
-                )
-                .andExpect(status().isBadRequest());
+        @Test
+        @DisplayName("should return 400 (bad request) if both request parameters are provided")
+        void searchRecipes_shouldThrowExceptionIfBothRequestParam() throws Exception {
+
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipe/search")
+                            .param("category", "beverage")
+                            .param("name", "tea")
+                    )
+                    .andExpect(status().isBadRequest());
+        }
     }
 }

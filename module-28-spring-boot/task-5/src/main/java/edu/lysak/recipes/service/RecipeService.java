@@ -2,6 +2,7 @@ package edu.lysak.recipes.service;
 
 import edu.lysak.recipes.dto.IngredientDto;
 import edu.lysak.recipes.dto.RecipeDto;
+import edu.lysak.recipes.exception.RecipeNotFoundException;
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.repository.RecipeRepository;
@@ -31,7 +32,7 @@ public class RecipeService {
 
     public Recipe getRecipe(Long id) {
         return recipeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new RecipeNotFoundException(String.format("Recipe with id=%s not found", id)));
     }
 
     @Transactional

@@ -1,6 +1,5 @@
-package edu.lysak.recipes.controller;
+package edu.lysak.recipes.exception;
 
-import edu.lysak.recipes.exception.RecipeNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -3,16 +3,18 @@ package edu.lysak.recipes.service;
 import edu.lysak.recipes.TestUtil;
 import edu.lysak.recipes.dto.IngredientDto;
 import edu.lysak.recipes.dto.RecipeDto;
+import edu.lysak.recipes.exception.RecipeNotFoundException;
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.repository.RecipeRepository;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,28 +38,37 @@ class RecipeServiceTest {
     @Mock
     private ProductService productService;
 
-    @Test
-    void getRecipe_shouldSuccessfullyReturnRecipe() {
-        Recipe expectedRecipe = TestUtil.getMockedRecipe();
-        when(recipeRepository.findById(any())).thenReturn(Optional.of(expectedRecipe));
+    @Nested
+    @DisplayName("#getRecipe(Long)")
+    class GetRecipeMethodTest {
 
-        Recipe recipe = recipeService.getRecipe(1L);
+        @Test
+        @DisplayName("should successfully return recipe")
+        void getRecipe_shouldSuccessfullyReturnRecipe() {
+            Recipe expectedRecipe = TestUtil.getMockedRecipe();
+            when(recipeRepository.findById(any())).thenReturn(Optional.of(expectedRecipe));
 
-        verify(recipeRepository).findById(1L);
-        assertEquals(expectedRecipe, recipe);
+            Recipe recipe = recipeService.getRecipe(1L);
+
+            verify(recipeRepository).findById(1L);
+            assertEquals(expectedRecipe, recipe);
+        }
+
+        @Test
+        @DisplayName("should throw RecipeNotFoundException if recipe is not found")
+        void getRecipe_shouldThrowExceptionIfRecipeNotFound() {
+            when(recipeRepository.findById(any())).thenReturn(Optional.empty());
+
+            assertThrows(RecipeNotFoundException.class,
+                    () -> recipeService.getRecipe(1L),
+                    "Recipe with id=1 not found");
+
+            verify(recipeRepository).findById(1L);
+        }
     }
 
     @Test
-    void getRecipe_shouldThrowExceptionIfRecipeNotFound() {
-        when(recipeRepository.findById(any())).thenReturn(Optional.empty());
-
-        assertThrows(ResponseStatusException.class,
-                () -> recipeService.getRecipe(1L));
-
-        verify(recipeRepository).findById(1L);
-    }
-
-    @Test
+    @DisplayName("#addRecipe(RecipeDto) should successfully save recipe")
     void addRecipe_shouldSuccessfullySaveRecipe() {
         RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
         Product product = TestUtil.getMockedProduct();
@@ -81,6 +92,7 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("#deleteRecipe(Long) should successfully delete recipe")
     void deleteRecipe_shouldSuccessfullyDeleteRecipe() {
         doNothing().when(recipeRepository).deleteRecipe(any());
 
@@ -90,6 +102,7 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("#updateRecipe(Long, RecipeDto) should successfully update recipe")
     void updateRecipe_shouldSuccessfullyUpdateRecipe() {
         when(productService.saveAndGetProduct(any())).thenReturn(new Product());
         doNothing().when(ingredientService).updateIngredientIfNotPresent(any(), any(), any());
@@ -110,6 +123,7 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("#getRecipesByCategory(String) should successfully return list of recipes for particular category")
     void getRecipesByCategory() {
         Recipe recipe = TestUtil.getMockedRecipe();
         when(recipeRepository.findAllByCategoryIgnoreCaseOrderByDateDesc(any())).thenReturn(List.of(recipe));
@@ -121,6 +135,7 @@ class RecipeServiceTest {
     }
 
     @Test
+    @DisplayName("#getRecipesByName(String) should successfully return list of recipes for particular name")
     void getRecipesByName() {
         Recipe recipe = TestUtil.getMockedRecipe();
         when(recipeRepository.findAllByNameContainingIgnoreCaseOrderByDateDesc(any())).thenReturn(List.of(recipe));

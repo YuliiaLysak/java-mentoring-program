@@ -3,6 +3,7 @@ package edu.lysak.recipes.controller;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.service.RecipeService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,31 +30,31 @@ public class RecipeController {
         return Map.of("id", id);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/api/recipe/{id}")
     public void deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
-        throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/api/recipe/{id}")
     public void updateRecipe(@PathVariable Long id, @Valid @RequestBody Recipe recipe) {
         recipeService.updateRecipe(id, recipe);
-        throw new ResponseStatusException(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/api/recipe/search")
-    public List<Recipe> searchRecipes(
+    public ResponseEntity<List<Recipe>> searchRecipes(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String name
     ) {
         if ((category == null && name == null) || (category != null && name != null)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
 
         if (category != null) {
-            return recipeService.getRecipesByCategory(category);
+            return ResponseEntity.ok(recipeService.getRecipesByCategory(category));
         } else {
-            return recipeService.getRecipesByName(name);
+            return ResponseEntity.ok(recipeService.getRecipesByName(name));
         }
     }
 }

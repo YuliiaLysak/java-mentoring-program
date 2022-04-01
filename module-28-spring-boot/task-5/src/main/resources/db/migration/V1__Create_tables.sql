@@ -6,24 +6,27 @@ create table recipes
     date        timestamp,
     description varchar(255)  not null,
     directions  varchar(4000) not null,
-    primary key (id)
+    primary key (id),
+    unique (name, category)
 );
 
 create table products
 (
     id   bigserial    not null,
     name varchar(255) not null,
-    primary key (id)
+    primary key (id),
+    unique (name)
 );
 
 create table ingredients
 (
     id               bigserial    not null,
     recipe_id        int8         not null,
-    product_id    int8         not null,
+    product_id       int8         not null,
     quantity         float8       not null,
     measurement_unit varchar(255) not null,
-    primary key (id)
+    primary key (id),
+    unique (recipe_id, product_id)
 );
 
 alter table ingredients
