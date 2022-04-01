@@ -13,9 +13,7 @@ ALTER TABLE IF EXISTS student_address
     ADD CONSTRAINT fk_student_id
         FOREIGN KEY (student_id)
             REFERENCES students
-            ON
-                DELETE
-                RESTRICT;
+            ON DELETE RESTRICT;
 
 CREATE TABLE student_address_updated
 (

@@ -52,25 +52,19 @@ ALTER TABLE IF EXISTS subjects
     ADD CONSTRAINT fk_tutor_id
         FOREIGN KEY (tutor_id)
             REFERENCES tutors
-            ON
-                DELETE
-                RESTRICT;
+            ON DELETE RESTRICT;
 
 ALTER TABLE IF EXISTS exam_results
     ADD CONSTRAINT fk_student_id
         FOREIGN KEY (student_id)
             REFERENCES students
-            ON
-                DELETE
-                RESTRICT;
+            ON DELETE RESTRICT;
 
 ALTER TABLE IF EXISTS exam_results
     ADD CONSTRAINT fk_subject_id
         FOREIGN KEY (subject_id)
             REFERENCES subjects
-            ON
-                DELETE
-                RESTRICT;
+            ON DELETE RESTRICT;
 
 -- 6. Add validation on DB level that will check username
 -- on special characters (reject student name with next
