@@ -1,0 +1,52 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:file:./module-28-spring-boot/task-4/local_db
+    driverClassName: org.h2.Driver
+    #   TODO: never commit password!!!!!!! this one is only for testing purpose
+    username: local
+    password: local
+server:
+  port: 8000
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:file:./module-28-spring-boot/task-4/dev_db
+    driverClassName: org.h2.Driver
+    #   TODO: never commit password!!!!!!! this one is only for testing purpose
+    username: dev
+    password: dev
+server:
+  port: 8001
+---
+spring:
+  config:
+    activate:
+      on-profile: stg
+  datasource:
+    url: jdbc:h2:file:./module-28-spring-boot/task-4/stg_db
+    driverClassName: org.h2.Driver
+    #   TODO: never commit password!!!!!!! this one is only for testing purpose
+    username: stg
+    password: stg
+server:
+  port: 8002
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:h2:file:./module-28-spring-boot/task-4/prod_db
+    driverClassName: org.h2.Driver
+    #   TODO: never commit password!!!!!!! this one is only for testing purpose
+    username: prod
+    password: prod
+server:
+  port: 8003
+
