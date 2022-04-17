@@ -1,0 +1,9 @@
+server:
+  port: 8080
+
+spring:
+  ldap:
+    embedded:
+      ldif: "classpath:landon.ldif"
+      base-dn: "dc=frankmoley,dc=com"
+      port: 8389
