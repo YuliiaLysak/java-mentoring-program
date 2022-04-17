@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" lang="en">
+<head>
+    <title>Home</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="jumbotron main-content">
+        <h1>Welcome</h1>
+    </div>
+    <div class="container">
+        <h3>What do you want to do?</h3>
+        <a th:href="@{/info}">Info page</a>
+    </div>
+</div>
+
+</body>
+</html>
