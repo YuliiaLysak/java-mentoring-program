@@ -1,8 +1,8 @@
 package edu.lysak.events.controller;
 
 import edu.lysak.events.EventService;
-import edu.lysak.events.domain.Event;
-import edu.lysak.events.domain.EventDto;
+import edu.lysak.events.domain.EventRequest;
+import edu.lysak.events.domain.EventResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@Tag(name = "Events Controller", description = "Events Controller API")
+@Tag(name = "Events API", description = "Events API provide the ability to manipulate the events")
 public class EventServiceController {
     private final EventService eventService;
 
@@ -35,15 +35,15 @@ public class EventServiceController {
     @Operation(summary = "Add new event", tags = {"event"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Event created",
-                    content = @Content(schema = @Schema(implementation = Event.class))),
+                    content = @Content(schema = @Schema(implementation = EventResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "409", description = "Event already exists")})
     public ResponseEntity<Long> addEvent(
             @Parameter(description = "Event to add. Cannot be null or empty.",
-                    required = true, schema = @Schema(implementation = Event.class))
-            @Valid @RequestBody EventDto eventDto
+                    required = true, schema = @Schema(implementation = EventRequest.class))
+            @Valid @RequestBody EventRequest eventRequest
     ) {
-        Long id = eventService.createEvent(eventDto);
+        Long id = eventService.createEvent(eventRequest);
         if (id == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
@@ -58,7 +58,7 @@ public class EventServiceController {
     @Operation(summary = "Update the existing event", tags = {"event"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Event updated",
-                    content = @Content(schema = @Schema(implementation = Event.class))),
+                    content = @Content(schema = @Schema(implementation = EventResponse.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "Event not found")})
     public ResponseEntity<Void> updateEvent(
@@ -66,10 +66,10 @@ public class EventServiceController {
                     required = true)
             @PathVariable("id") Long id,
             @Parameter(description = "Event to update. Cannot be null or empty.",
-                    required = true, schema = @Schema(implementation = Event.class))
-            @Valid @RequestBody EventDto eventDto
+                    required = true, schema = @Schema(implementation = EventRequest.class))
+            @Valid @RequestBody EventRequest eventRequest
     ) {
-        if (!eventService.updateEvent(id, eventDto)) {
+        if (!eventService.updateEvent(id, eventRequest)) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok().build();
@@ -81,14 +81,14 @@ public class EventServiceController {
     @Operation(summary = "Find event by id", tags = {"event"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Event is found",
-                    content = @Content(schema = @Schema(implementation = Event.class))),
+                    content = @Content(schema = @Schema(implementation = EventResponse.class))),
             @ApiResponse(responseCode = "404", description = "Event not found")})
-    public ResponseEntity<Event> findEventById(
+    public ResponseEntity<EventResponse> findEventById(
             @Parameter(description = "Id of the event to be obtained. Cannot be empty.",
                     required = true)
             @PathVariable("id") Long id
     ) {
-        Event event = eventService.getEvent(id);
+        EventResponse event = eventService.getEvent(id);
         if (event == null) {
             return ResponseEntity.notFound().build();
         }
@@ -114,7 +114,7 @@ public class EventServiceController {
     @GetMapping(value = "/event", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Get list of all events", tags = {"event"})
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<List<Event>> getAllEvents() {
+    public ResponseEntity<List<EventResponse>> getAllEvents() {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
@@ -124,8 +124,8 @@ public class EventServiceController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<List<Event>> getAllEvents(@Parameter(description = "Event title") @RequestParam("title") String title) {
-        List<Event> events = eventService.getAllEventsByTitle(title);
+    public ResponseEntity<List<EventResponse>> getAllEvents(@Parameter(description = "Event title") @RequestParam("title") String title) {
+        List<EventResponse> events = eventService.getAllEventsByTitle(title);
         if (events.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

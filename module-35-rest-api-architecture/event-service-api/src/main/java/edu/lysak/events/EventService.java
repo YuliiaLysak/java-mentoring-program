@@ -1,21 +1,21 @@
 package edu.lysak.events;
 
-import edu.lysak.events.domain.Event;
-import edu.lysak.events.domain.EventDto;
+import edu.lysak.events.domain.EventRequest;
+import edu.lysak.events.domain.EventResponse;
 
 import java.util.List;
 
 public interface EventService {
 
-    Long createEvent(EventDto eventDto);
+    Long createEvent(EventRequest eventRequest);
 
-    boolean updateEvent(Long id, EventDto eventDto);
+    boolean updateEvent(Long id, EventRequest eventRequest);
 
-    Event getEvent(Long id);
+    EventResponse getEvent(Long id);
 
     boolean deleteEvent(Long id);
 
-    List<Event> getAllEvents();
+    List<EventResponse> getAllEvents();
 
-    List<Event> getAllEventsByTitle(String title);
+    List<EventResponse> getAllEventsByTitle(String title);
 }

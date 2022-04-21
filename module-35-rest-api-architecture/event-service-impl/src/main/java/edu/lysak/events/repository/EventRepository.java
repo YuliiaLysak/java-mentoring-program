@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,7 +20,10 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     @Query("DELETE FROM Event e WHERE e.id=:id")
     int delete(@Param("id") Long id);
 
-    Iterable<Event> findAllByTitle(String title);
+    @Query("SELECT event FROM Event event")
+    List<Event> findAllEvents();
+
+    List<Event> findAllByTitle(String title);
 
     Optional<Event> findByTitleAndSpeakerAndDateTime(String title, String speaker, LocalDateTime dateTime);
 }
