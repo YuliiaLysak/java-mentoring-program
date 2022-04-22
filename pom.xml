@@ -12,6 +12,7 @@
         <module>module-17-databases</module>
         <module>module-28-spring-boot</module>
         <module>module-35-rest-api-architecture</module>
+        <module>module-49-security-applications</module>
     </modules>
 
     <properties>
