@@ -11,4 +11,9 @@ public class UserController {
         return "recipes-statistics";
     }
 
+    @GetMapping("/about")
+    public String getInfoForUnauthUsers() {
+        return "recipes-statistics-non-auth";
+    }
+
 }

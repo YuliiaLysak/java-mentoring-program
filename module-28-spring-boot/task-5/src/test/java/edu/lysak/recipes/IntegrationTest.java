@@ -23,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTest {
 
+    // TODO: 06.04.2022 fix tests after adding spring security
+
     @Autowired
     private TestRestTemplate restTemplate;
 
