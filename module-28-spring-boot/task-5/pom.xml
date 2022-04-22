@@ -12,7 +12,7 @@
     <artifactId>task-5</artifactId>
 
     <properties>
-        <flyway-core.version>8.5.4</flyway-core.version>
+        <flyway-core.version>8.5.7</flyway-core.version>
     </properties>
 
     <dependencies>
@@ -50,6 +50,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+
+        <!-- Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
 
