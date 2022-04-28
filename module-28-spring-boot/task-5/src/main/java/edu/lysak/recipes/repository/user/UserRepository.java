@@ -1,4 +1,4 @@
-package edu.lysak.recipes.repository;
+package edu.lysak.recipes.repository.user;
 
 import edu.lysak.recipes.model.user.User;
 import org.springframework.data.repository.CrudRepository;

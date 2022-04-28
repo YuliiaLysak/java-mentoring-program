@@ -5,20 +5,31 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class UserPrincipal implements UserDetails {
 
     private final User user;
+    private final List<AuthGroup> authGroups;
 
-    public UserPrincipal(User user) {
+    public UserPrincipal(User user, List<AuthGroup> authGroups) {
         super();
         this.user = user;
+        this.authGroups = authGroups;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        if (authGroups == null) {
+            return Set.of();
+        }
+        Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
+        authGroups.forEach(group ->
+                grantedAuthorities.add(new SimpleGrantedAuthority(group.getAuthGroup()))
+        );
+        return grantedAuthorities;
     }
 
     @Override
