@@ -1,6 +1,6 @@
 package edu.lysak.recipes.config;
 
-import edu.lysak.recipes.service.UserService;
+import edu.lysak.recipes.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,9 +16,17 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
+    private final CustomLoginFailureHandler loginFailureHandler;
+    private final CustomLoginSuccessHandler loginSuccessHandler;
 
-    public ApplicationSecurityConfiguration(UserService userService) {
+    public ApplicationSecurityConfiguration(
+            UserService userService,
+            CustomLoginFailureHandler loginFailureHandler,
+            CustomLoginSuccessHandler loginSuccessHandler
+    ) {
         this.userService = userService;
+        this.loginFailureHandler = loginFailureHandler;
+        this.loginSuccessHandler = loginSuccessHandler;
     }
 
     @Override
@@ -26,13 +34,16 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/index", "/about", "/css/*", "/js/*").permitAll()
-                .antMatchers("/admin").hasAuthority("ADMIN")
+                .antMatchers("/", "/index", "/login", "/about", "/css/*", "/js/*").permitAll()
+                .antMatchers("/admin", "/blocked-users").hasAuthority("ADMIN")
                 .antMatchers("/info").hasAuthority("USER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login").permitAll()
+                .loginPage("/login")
+                .failureHandler(loginFailureHandler)
+                .successHandler(loginSuccessHandler)
+                .permitAll()
                 .and()
                 .logout().invalidateHttpSession(true)
                 .clearAuthentication(true)

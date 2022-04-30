@@ -69,6 +69,13 @@
             <version>${thymeleaf-springsecurity5.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
+        </dependency>
+
+
         <!-- Other -->
         <dependency>
             <groupId>org.projectlombok</groupId>
