@@ -1,6 +1,7 @@
 package edu.lysak.recipes.config;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +49,9 @@ public class CustomLoginFailureHandler extends SimpleUrlAuthenticationFailureHan
                     userService.lock(user);
                     exception = new LockedException(
                             String.format("Your account has been locked due to %s failed attempts." +
-                            " It will be unlocked after %s minutes.", maxFailedAttempts, (lockTimeDuration / 1000 / 60))
+                            " It will be unlocked after %s minutes.",
+                                    maxFailedAttempts,
+                                    TimeUnit.MILLISECONDS.toMinutes(lockTimeDuration))
                     );
                 }
             } else {
