@@ -16,9 +16,8 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/blocked-users")
+    @GetMapping("/api/blocked-users")
     public ResponseEntity<List<BlockedUser>> getAllBlockedUsers() {
-        List<BlockedUser> users = userService.getBlockedUsers();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(userService.getBlockedUsers());
     }
 }

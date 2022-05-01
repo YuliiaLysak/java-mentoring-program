@@ -5,9 +5,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserPrincipal implements UserDetails {
 
@@ -25,11 +25,9 @@ public class UserPrincipal implements UserDetails {
         if (authGroups == null) {
             return Set.of();
         }
-        Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
-        authGroups.forEach(group ->
-                grantedAuthorities.add(new SimpleGrantedAuthority(group.getAuthGroup()))
-        );
-        return grantedAuthorities;
+        return authGroups.stream()
+                .map(authGroup -> new SimpleGrantedAuthority(authGroup.getAuthGroup()))
+                .collect(Collectors.toSet());
     }
 
     @Override

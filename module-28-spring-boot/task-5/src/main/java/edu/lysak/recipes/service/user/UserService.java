@@ -6,6 +6,7 @@ import edu.lysak.recipes.model.user.User;
 import edu.lysak.recipes.model.user.UserPrincipal;
 import edu.lysak.recipes.repository.user.AuthGroupRepository;
 import edu.lysak.recipes.repository.user.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,20 +14,23 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
-    public static final int MAX_FAILED_ATTEMPTS = 3;
-    private static final long LOCK_TIME_DURATION = 5 * 60 * 1000; // 5 minutes
 
     private final UserRepository userRepository;
     private final AuthGroupRepository authGroupRepository;
+    private final long lockTimeDuration;
 
-    public UserService(UserRepository userRepository, AuthGroupRepository authGroupRepository) {
+    public UserService(
+            UserRepository userRepository,
+            AuthGroupRepository authGroupRepository,
+            @Value("${login.lock-time}") long lockTimeDuration
+    ) {
         super();
         this.userRepository = userRepository;
         this.authGroupRepository = authGroupRepository;
+        this.lockTimeDuration = lockTimeDuration;
     }
 
     @Override
@@ -59,7 +63,7 @@ public class UserService implements UserDetailsService {
         long lockTimeInMillis = user.getLockTime().getTime();
         long currentTimeInMillis = System.currentTimeMillis();
 
-        if (lockTimeInMillis + LOCK_TIME_DURATION < currentTimeInMillis) {
+        if (lockTimeInMillis + lockTimeDuration < currentTimeInMillis) {
             user.setAccountNonLocked(true);
             user.setLockTime(null);
             user.setFailedAttempt(0);
@@ -77,16 +81,6 @@ public class UserService implements UserDetailsService {
     }
 
     public List<BlockedUser> getBlockedUsers() {
-        List<User> blockedUsers = userRepository.findAllBlockedUsers();
-        return blockedUsers.stream()
-                .map(this::mapToBlockedUser)
-                .collect(Collectors.toList());
-    }
-
-    private BlockedUser mapToBlockedUser(User user) {
-        BlockedUser blockedUser = new BlockedUser();
-        blockedUser.setEmail(user.getEmail());
-        blockedUser.setLockTime(user.getLockTime());
-        return blockedUser;
+        return userRepository.findAllBlockedUsers();
     }
 }
