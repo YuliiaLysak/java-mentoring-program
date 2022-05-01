@@ -20,7 +20,7 @@
     </modules>
 
     <properties>
-        <spring-boot.version>2.6.4</spring-boot.version>
+        <spring-boot.version>2.6.6</spring-boot.version>
         <lombok.version>1.18.22</lombok.version>
         <h2.version>2.1.210</h2.version>
     </properties>

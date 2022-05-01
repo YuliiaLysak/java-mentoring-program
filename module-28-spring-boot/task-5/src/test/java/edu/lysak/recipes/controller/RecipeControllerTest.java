@@ -33,6 +33,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(RecipeController.class)
 class RecipeControllerTest {
 
+    // TODO: 06.04.2022 fix tests after adding spring security
+    // check this course video:
+    // https://www.linkedin.com/learning/extending-securing-and-dockerizing-spring-boot-microservices/securing-apis?autoSkip=true&autoplay=true&dApp=53239054&leis=LAA&resume=false&u=2113185
+
     @Autowired
     private MockMvc mockMvc;
 

@@ -4,23 +4,17 @@ server:
 #datasource settings
 spring:
   datasource:
-    url: jdbc:h2:file:./module-28-spring-boot/task-5/mentoring_recipes_db
-    driverClassName: org.h2.Driver
-#   TODO: never commit password!!!!!!! this one is only for testing purpose
-    username: abc123
-    password: abc123
+    url: jdbc:postgresql://localhost:5432/mentoring_recipes_db
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
 
 #data settings
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate # Hibernate ddl auto (create, create-drop, validate, update)
     show-sql: false
 
-#console settings
-  h2:
-    console:
-      enabled: true
-      path: /h2
-      settings:
-        trace: false
+login:
+  max-failed-attempts: 3
+  lock-time: 300000 # 5 minutes (5 * 60 * 1000)
