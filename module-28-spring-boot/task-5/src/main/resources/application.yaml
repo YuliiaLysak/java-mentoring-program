@@ -5,6 +5,8 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/mentoring_recipes_db
+#    Uncomment next line to run app via Docker using postgres Docker image
+#    url: jdbc:postgresql://local-postgres:5432/mentoring_recipes_db
     username: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
 
