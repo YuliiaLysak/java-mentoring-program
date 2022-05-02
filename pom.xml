@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>module-17-databases</module>
+        <module>module-24-microservices</module>
         <module>module-28-spring-boot</module>
         <module>module-35-rest-api-architecture</module>
         <module>module-49-security-applications</module>
