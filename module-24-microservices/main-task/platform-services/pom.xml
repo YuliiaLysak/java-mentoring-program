@@ -3,17 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>java-mentoring-program</artifactId>
+        <artifactId>main-task</artifactId>
         <groupId>edu.lysak</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>module-24-microservices</artifactId>
+    <artifactId>platform-services</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>spring-cloud</module>
-        <module>main-task</module>
+        <module>discovery</module>
+        <module>apigateway</module>
     </modules>
 
 </project>
