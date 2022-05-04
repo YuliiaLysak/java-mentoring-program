@@ -1,0 +1,26 @@
+<html>
+<body ng-app="myApp" ng-controller="mainCtrl">
+<script src="angular.min.js"></script>
+<script src="angular-resource.min.js"></script>
+
+<script>
+    var app = angular.module('myApp', ["ngResource"]);
+
+    app.controller('mainCtrl', function($scope,$resource,$http) {
+        $scope.foo = {id:0 , name:"sample foo"};
+        $scope.foos = $resource("/foos/:fooId",{fooId:'@id'});
+
+        $scope.getFoo = function(){
+            $scope.foo = $scope.foos.get({fooId:$scope.foo.id});
+        }
+    });
+</script>
+
+<div>
+    <h1>Foo Details</h1>
+    <span>{{foo.id}}</span>
+    <span>{{foo.name}}</span>
+    <a href="#" ng-click="getFoo()">New Foo</a>
+</div>
+</body>
+</html>

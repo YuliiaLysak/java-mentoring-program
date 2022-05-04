@@ -10,5 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>apigateway</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>zuul-ui</module>
+        <module>zuul-api</module>
+        <module>spring-cloud-gateway</module>
+        <module>spring-cloud-gateway-1</module>
+    </modules>
 
 </project>
