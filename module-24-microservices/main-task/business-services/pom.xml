@@ -10,5 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>business-services</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>one</module>
+        <module>two</module>
+        <module>two-api</module>
+        <module>common</module>
+    </modules>
 
 </project>
