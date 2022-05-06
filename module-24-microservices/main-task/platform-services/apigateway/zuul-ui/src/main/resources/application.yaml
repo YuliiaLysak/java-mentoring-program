@@ -1,0 +1,14 @@
+zuul:
+  routes:
+    foos:
+      path: /foos/**
+      url: http://localhost:8081/spring-zuul-foos-resource/foos
+
+  SendErrorFilter:
+    post:
+      disable: true
+
+# property added due to dependencies issues
+server:
+  servlet:
+    register-default-servlet: true

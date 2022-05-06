@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8083/eureka
+
+# Spring Cloud Gateway using property based config
+# (use these configurations or class SpringCloudConfig)
+
+#spring:
+#  cloud:
+#    gateway:
+#      # (use this property (default-filters) or @Bean GlobalFilter globalFilter())
+#      default-filters:
+#        - name: CustomFilter
+#      routes:
+#        - id: employeeModule
+#          uri: lb://FIRST-SERVICE
+#          predicates:
+#            - Path=/employee/**
+#          filters:
+#            - CustomFilter
+#            - AddRequestHeader=first-request, first-request-header
+#            - AddResponseHeader=first-response, first-response-header
+#        - id: consumerModule
+#          uri: lb://SECOND-SERVICE
+#          predicates:
+#            - Path=/consumer/**
+#          filters:
+#            - CustomFilter
+#            - AddRequestHeader=second-request, second-request-header
+#            - AddResponseHeader=second-response, second-response-header
