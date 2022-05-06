@@ -1,0 +1,34 @@
+services:
+  discovery:
+    build: ./platform-services-v2/discovery-v2/target/docker
+    ports:
+      - "8761:8761"
+
+  apigateway:
+    build: ./platform-services-v2/apigateway-v2/target/docker
+    environment:
+      - EUREKA_URL=http://discovery:8761/eureka
+    ports:
+      - "8080:8080"
+    links:
+      - discovery
+    depends_on:
+      - discovery
+
+  one:
+    build: ./business-services-v2/one-v2/target/docker
+    environment:
+      - EUREKA_URL=http://discovery:8761/eureka
+    links:
+      - discovery
+    depends_on:
+      - discovery
+
+  two:
+    build: ./business-services-v2/two-v2/target/docker
+    environment:
+      - EUREKA_URL=http://discovery:8761/eureka
+    links:
+      - discovery
+    depends_on:
+      - discovery

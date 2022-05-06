@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: two-service
+server:
+  port: 8082
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}

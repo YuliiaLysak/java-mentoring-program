@@ -3,19 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>main-task</artifactId>
+        <artifactId>main-task-v2</artifactId>
         <groupId>edu.lysak</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>business-services</artifactId>
+    <artifactId>platform-services-v2</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>one</module>
-        <module>two</module>
-        <module>two-api</module>
-        <module>common</module>
+        <module>apigateway-v2</module>
+        <module>discovery-v2</module>
     </modules>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
 </project>
