@@ -12,7 +12,6 @@
     <artifactId>main-task</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>business-services</module>
         <module>platform-services</module>
     </modules>
 
