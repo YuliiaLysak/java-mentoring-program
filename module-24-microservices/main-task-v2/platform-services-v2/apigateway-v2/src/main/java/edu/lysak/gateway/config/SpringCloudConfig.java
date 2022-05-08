@@ -15,23 +15,23 @@ public class SpringCloudConfig {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
-                .route("employeeModule", r -> r
-                        .path("/employee/**")
+                .route("oneModule", r -> r
+                        .path("/one/**")
                         //Pre and Post Filters provided by Spring Cloud Gateway
                         .filters(f -> f
-                                .addRequestHeader("first-request", "first-request-header")
-                                .addResponseHeader("first-response", "first-response-header")
+                                .addRequestHeader("one-request", "one-request-header")
+                                .addResponseHeader("one-response", "one-response-header")
                         )
-                        .uri("lb://FIRST-SERVICE")
+                        .uri("lb://ONE-SERVICE")
                 )
-                .route("consumerModule", r -> r
-                        .path("/consumer/**")
+                .route("twoModule", r -> r
+                        .path("/two/**")
                         //Pre and Post Filters provided by Spring Cloud Gateway
                         .filters(f -> f
-                                .addRequestHeader("second-request", "second-request-header")
-                                .addResponseHeader("second-response", "second-response-header")
+                                .addRequestHeader("two-request", "two-request-header")
+                                .addResponseHeader("two-response", "two-response-header")
                         )
-                        .uri("lb://SECOND-SERVICE")
+                        .uri("lb://TWO-SERVICE")
                 )
                 .build();
     }

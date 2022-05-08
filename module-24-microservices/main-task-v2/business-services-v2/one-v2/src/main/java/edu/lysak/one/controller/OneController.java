@@ -1,4 +1,4 @@
-package edu.lysak.secondservice;
+package edu.lysak.one.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-public class SecondController {
+public class OneController {
 
-    @GetMapping("/consumer/message")
-    public String test(@RequestHeader("second-request") String header) {
+    @GetMapping("/one/message")
+    public String test(@RequestHeader("one-request") String header) {
         log.info(header);
-        return "Hello from Second Service";
+        return "Hello from one-service";
     }
 
 }

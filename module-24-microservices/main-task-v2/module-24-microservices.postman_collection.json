@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "137a3c28-1291-4231-9986-1ea31893bcce",
+		"name": "module-24-microservices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "one-service (via gateway)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "one-request",
+						"value": "one-header",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/one/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"one",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "two-service (via gateway)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "two-request",
+						"value": "two-header",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/two/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"two",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one-service (direct)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "one-request",
+						"value": "one-header",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/one/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"one",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "two-service (direct)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "two-request",
+						"value": "two-header",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8082/two/message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"two",
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eureka server",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "first-request",
+						"value": "one-header",
+						"type": "text"
+					},
+					{
+						"key": "second-request",
+						"value": "two-header",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8761",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8761"
+				}
+			},
+			"response": []
+		}
+	]
+}
