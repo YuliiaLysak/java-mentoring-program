@@ -42,9 +42,9 @@ public class SpringCloudConfig {
     @Bean
     public GlobalFilter globalFilter() {
         return (exchange, chain) -> {
-            System.out.println("First Global filter");
+            log.info("First Global filter");
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                System.out.println("Second Global filter");
+                log.info("Second Global filter");
             }));
         };
     }

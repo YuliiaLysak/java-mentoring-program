@@ -9,7 +9,7 @@ public class TwoController {
 
     @GetMapping("/two/message")
     public String test(@RequestHeader("two-request") String header) {
-        System.out.println(header);
+        log.info(header);
         return "Hello from two-service";
     }
 

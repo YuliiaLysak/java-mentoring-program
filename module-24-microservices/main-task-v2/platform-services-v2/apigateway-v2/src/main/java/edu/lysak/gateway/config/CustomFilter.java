@@ -1,11 +1,13 @@
 package edu.lysak.gateway.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
+@Slf4j
 public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Config> {
     public CustomFilter() {
         super(Config.class);
@@ -15,10 +17,10 @@ public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Conf
     public GatewayFilter apply(Config config) {
         //Custom Pre Filter. Suppose we can extract JWT and perform Authentication
         return (exchange, chain) -> {
-            System.out.println("First pre filter" + exchange.getRequest());
+            log.info("First pre filter" + exchange.getRequest());
             //Custom Post Filter.Suppose we can call error response handler based on error code.
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                System.out.println("First post filter");
+                log.info("First post filter");
             }));
         };
     }
