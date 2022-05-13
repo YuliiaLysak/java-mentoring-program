@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>kafka-general</module>
+        <module>elastic-search-twitter</module>
     </modules>
 
 </project>
