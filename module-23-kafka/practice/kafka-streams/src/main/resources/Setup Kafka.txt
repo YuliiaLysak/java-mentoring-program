@@ -1,0 +1,68 @@
+### Start Kafka Services ###
+
+1. Start the zookeeper service
+2. Start the kafka service
+
+### Create Topics ###
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.orders.input \
+    --partitions 1 \
+    --replication-factor 1
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.alerts.input \
+    --partitions 1 \
+    --replication-factor 1
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.alerts.critical \
+    --partitions 1 \
+    --replication-factor 1
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.alerts.highvolume \
+    --partitions 1 \
+    --replication-factor 1
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.leaderboards.input \
+    --partitions 1 \
+    --replication-factor 1
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.sentiment.input \
+    --partitions 1 \
+    --replication-factor 1
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.sentiment.output \
+    --partitions 1 \
+    --replication-factor 1
+
+kafka-topics \
+    --bootstrap-server localhost:9092 \
+    --create \
+    --topic streaming.views.input \
+    --partitions 1 \
+    --replication-factor 1
+
+# Check if all topics are created correctly
+kafka-topics --bootstrap-server localhost:9092 --list
+
+
+
