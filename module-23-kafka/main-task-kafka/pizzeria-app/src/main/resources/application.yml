@@ -1,0 +1,12 @@
+server:
+  port: 8081
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic:
+      order: order_topic
+      notification: notification_topic
+    consumer:
+      group-id: pizzeria_consumers
+    #      auto-offset-reset: earliest
