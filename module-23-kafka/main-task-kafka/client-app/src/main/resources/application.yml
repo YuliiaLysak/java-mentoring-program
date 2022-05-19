@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+#datasource settings
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pizzeria_db
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+
+#data settings
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate # Hibernate ddl auto (create, create-drop, validate, update)
+    show-sql: false
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    topic:
+      order: order_topic
+      notification: notification_topic
+    consumer:
+      group-id: client_consumers
+    #      auto-offset-reset: earliest
