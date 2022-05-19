@@ -1,5 +1,6 @@
 package edu.lysak.gateway.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
@@ -9,6 +10,7 @@ import reactor.core.publisher.Mono;
 
 // Spring Cloud Gateway using Java based config
 // (use this class or configurations in application.yaml)
+@Slf4j
 @Configuration
 public class SpringCloudConfig {
 
