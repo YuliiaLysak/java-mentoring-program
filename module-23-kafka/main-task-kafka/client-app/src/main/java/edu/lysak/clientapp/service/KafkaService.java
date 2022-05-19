@@ -10,7 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Service
@@ -32,22 +31,18 @@ public class KafkaService {
     }
 
     public void sendOrder(Long orderId, OrderInfo orderInfo) {
-        ListenableFuture<SendResult<Long, OrderInfo>> future = kafkaTemplate.send(
-                orderTopic,
-                orderId,
-                orderInfo
-        );
-        future.addCallback(new ListenableFutureCallback<>() {
-            @Override
-            public void onSuccess(SendResult<Long, OrderInfo> result) {
-                log.info("Sent order with id={}", orderId);
-            }
+        kafkaTemplate.send(orderTopic, orderId, orderInfo)
+                .addCallback(new ListenableFutureCallback<>() {
+                    @Override
+                    public void onSuccess(SendResult<Long, OrderInfo> result) {
+                        log.info("Sent order with id={}", orderId);
+                    }
 
-            @Override
-            public void onFailure(Throwable ex) {
-                log.error("Unable to send order with id={} due to : {}", orderId, ex.getMessage(), ex);
-            }
-        });
+                    @Override
+                    public void onFailure(Throwable ex) {
+                        log.error("Unable to send order with id={} due to : {}", orderId, ex.getMessage(), ex);
+                    }
+                });
     }
 
     @KafkaListener(

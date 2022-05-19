@@ -8,8 +8,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
+
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -33,18 +34,23 @@ public class KafkaService {
     public void listenFilteredNotifications(Notification notification) {
         Status status = notification.getStatus();
         Long orderId = notification.getOrderId();
-        log.info("Received status={} for order with id={}", status, orderId);
 
         if (Status.PREPARED.equals(status)) {
-            notification.setStatus(Status.DELIVERING);
-            sendNotification(orderId, notification);
+            CompletableFuture.runAsync(() -> {
+                log.info("Received status={} for order with id={}", status, orderId);
+                notification.setStatus(Status.DELIVERING);
+                sendNotification(orderId, notification);
+            });
             return;
         }
 
         if (Status.DELIVERING.equals(status)) {
-            deliverPizza();
-            notification.setStatus(Status.COMPLETED);
-            sendNotification(orderId, notification);
+            CompletableFuture.runAsync(() -> {
+                log.info("Received status={} for order with id={}", status, orderId);
+                deliverPizza();
+                notification.setStatus(Status.COMPLETED);
+                sendNotification(orderId, notification);
+            });
         }
     }
 
@@ -58,21 +64,18 @@ public class KafkaService {
     }
 
     private void sendNotification(Long orderId, Notification notification) {
-        ListenableFuture<SendResult<Long, Notification>> future = kafkaTemplate.send(
-                notificationTopic,
-                orderId,
-                notification
-        );
-        future.addCallback(new ListenableFutureCallback<>() {
-            @Override
-            public void onSuccess(SendResult<Long, Notification> result) {
-                log.info("Sent notification with status={} for orderId={}", notification.getStatus(), orderId);
-            }
+        kafkaTemplate
+                .send(notificationTopic, orderId, notification)
+                .addCallback(new ListenableFutureCallback<>() {
+                    @Override
+                    public void onSuccess(SendResult<Long, Notification> result) {
+                        log.info("Sent notification with status={} for orderId={}", notification.getStatus(), orderId);
+                    }
 
-            @Override
-            public void onFailure(Throwable ex) {
-                log.error("Unable to send notification for orderId={} due to : {}", orderId, ex.getMessage(), ex);
-            }
-        });
+                    @Override
+                    public void onFailure(Throwable ex) {
+                        log.error("Unable to send notification for orderId={} due to : {}", orderId, ex.getMessage(), ex);
+                    }
+                });
     }
 }
