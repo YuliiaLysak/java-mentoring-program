@@ -1,0 +1,16 @@
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          r2dbc: DEBUG
+
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/react_test_db
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  flyway:
+    url: jdbc:postgresql://localhost:5432/react_test_db
+    user: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
