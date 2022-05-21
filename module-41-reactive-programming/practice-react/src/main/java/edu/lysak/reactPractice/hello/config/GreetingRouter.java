@@ -26,6 +26,10 @@ public class GreetingRouter {
 
         return RouterFunctions
                 .route(helloSimpleRoute, greetingHandler::helloSimple)
-                .andRoute(helloRoute, greetingHandler::hello);
+                .andRoute(helloRoute, greetingHandler::hello)
+                .andRoute(
+                        RequestPredicates.GET("/"),
+                        greetingHandler::index
+                );
     }
 }

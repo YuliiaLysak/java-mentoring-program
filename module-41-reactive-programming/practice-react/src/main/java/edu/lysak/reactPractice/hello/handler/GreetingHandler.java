@@ -9,6 +9,8 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 @Component
 public class GreetingHandler {
 
@@ -43,5 +45,14 @@ public class GreetingHandler {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(data, Greeting.class);
+    }
+
+    public Mono<ServerResponse> index(ServerRequest serverRequest) {
+        String user = serverRequest.queryParam("user")
+                .orElse("Nobody");
+
+        return ServerResponse
+                .ok()
+                .render("index", Map.of("user", user));
     }
 }
