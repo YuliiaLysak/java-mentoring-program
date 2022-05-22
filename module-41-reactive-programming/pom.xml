@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>practice-react</module>
+        <module>test-project-with-angular-and-mongodb</module>
     </modules>
 
 </project>
