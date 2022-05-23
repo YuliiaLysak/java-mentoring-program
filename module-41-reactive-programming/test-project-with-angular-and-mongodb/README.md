@@ -1,4 +1,6 @@
-###How to build Angular app (folder 'reservation-app'):
+##How to build Angular app (folder 'reservation-app'):
+
+###Initial setup
 
 1. Install npm using homebrew
 
@@ -29,3 +31,12 @@
 7. Start the app
 
 ```ng serve```
+
+
+###Generate Angular service class
+
+```ng generate service reservation```
+
+###Run tests
+
+```ng test```
