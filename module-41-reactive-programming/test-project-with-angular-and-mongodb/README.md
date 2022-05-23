@@ -1,3 +1,13 @@
+##How to run mongo-db in docker:
+
+```brew update```
+
+```docker pull bitnami/mongodb```
+
+```docker run -p 27888:27017 --name mongodb bitnami/mongodb:latest```
+
+
+
 ##How to build Angular app (folder 'reservation-app'):
 
 ###Initial setup

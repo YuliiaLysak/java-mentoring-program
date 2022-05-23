@@ -11,7 +11,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
+/*
+    As of Spring Boot 2.1, we no longer need @ExtendWith() to load the SpringExtension
+    because it's included as a meta annotation in the Spring Boot test
+    annotations like @DataJpaTest, @WebMvcTest, and @SpringBootTest.
+*/
+//@ExtendWith(SpringExtension.class)
+
 //  We create a `@SpringBootTest`, starting an actual server on a `RANDOM_PORT`
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class GreetingRouterTest {
