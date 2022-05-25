@@ -14,6 +14,7 @@
         <module>module-24-microservices</module>
         <module>module-28-spring-boot</module>
         <module>module-35-rest-api-architecture</module>
+        <module>module-41-reactive-programming</module>
         <module>module-49-security-applications</module>
     </modules>
 
