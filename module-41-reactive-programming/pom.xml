@@ -14,6 +14,7 @@
     <modules>
         <module>practice-react</module>
         <module>test-project-with-angular-and-mongodb</module>
+        <module>main-task-reactive</module>
     </modules>
 
 </project>
