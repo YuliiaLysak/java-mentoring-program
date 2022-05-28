@@ -17,8 +17,11 @@ public class SportService {
         this.sportRepository = sportRepository;
     }
 
+    public Mono<Void> deleteAll() {
+        return sportRepository.deleteAll();
+    }
+
     public Mono<Sport> save(Sport sport) {
-        log.info("Saving record to db, id={}", sport.getDecathlonId());
         return sportRepository.save(sport);
     }
 
