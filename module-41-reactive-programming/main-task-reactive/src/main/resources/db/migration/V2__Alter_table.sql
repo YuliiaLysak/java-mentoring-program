@@ -1,0 +1,4 @@
+ALTER TABLE sport DROP CONSTRAINT sport_pkey;
+ALTER TABLE sport ADD PRIMARY KEY (sport_id);
+
+ALTER TABLE sport ALTER COLUMN decathlon_id DROP NOT NULL;

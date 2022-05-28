@@ -1,11 +1,13 @@
 package edu.lysak.sport.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
+@NoArgsConstructor
 @Table("sport")
 public class Sport {
 
@@ -28,4 +30,7 @@ public class Sport {
     @Column("icon")
     private String icon;
 
+    public Sport(String name) {
+        this.name = name;
+    }
 }
