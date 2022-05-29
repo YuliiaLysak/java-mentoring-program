@@ -12,6 +12,9 @@ spring:
     user: ${DATASOURCE_USERNAME}
     password: ${DATASOURCE_PASSWORD}
 
+  profiles:
+    active: Rest # Task
+
 logging:
   level:
     org:

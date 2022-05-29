@@ -9,4 +9,6 @@ import reactor.core.publisher.Mono;
 public interface SportRepository extends ReactiveCrudRepository<Sport, Long> {
 
     Mono<Sport> findByName(String name);
+
+    Mono<Integer> deleteSportBySportId(Long sportId);
 }
