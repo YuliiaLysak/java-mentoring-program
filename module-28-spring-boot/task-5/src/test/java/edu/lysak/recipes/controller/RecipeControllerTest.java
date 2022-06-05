@@ -28,7 +28,8 @@ import java.util.List;
 import static edu.lysak.recipes.ResponseBodyMatchers.responseBody;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -57,7 +58,7 @@ class RecipeControllerTest {
 
         @WithMockUser
         @Test
-        @DisplayName("should successfully return recipe")
+        @DisplayName("should successfully return recipe and status 200")
         void getRecipe_shouldSuccessfullyReturnRecipe() throws Exception {
             Recipe expectedRecipe = TestUtil.getMockedRecipe();
             when(recipeService.getRecipe(any())).thenReturn(expectedRecipe);
@@ -78,12 +79,22 @@ class RecipeControllerTest {
 
         @WithMockUser
         @Test
-        @DisplayName("should return 404 (not found) if recipe not found")
+        @DisplayName("should return status 404 (not found) if recipe not found")
         void getRecipe_shouldReturn404ifRecipeNotFound() throws Exception {
             when(recipeService.getRecipe(any())).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
 
             mockMvc.perform(MockMvcRequestBuilders.get("/api/recipe/{id}", 1))
                     .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("should return status 401 (unauthorized) if user is unauthenticated")
+        void getRecipe_shouldReturn401ifUserUnauthorized() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipe/{id}", 1)
+                            .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isUnauthorized());
         }
     }
 
@@ -93,7 +104,7 @@ class RecipeControllerTest {
 
         @WithMockUser
         @Test
-        @DisplayName("should successfully add new recipe and return it's id")
+        @DisplayName("should successfully add new recipe and return it's id and status 200")
         void addRecipe_shouldAddRecipeAndReturnId() throws Exception {
             when(recipeService.addRecipe(any())).thenReturn(1L);
 
@@ -120,7 +131,7 @@ class RecipeControllerTest {
         // testing @Valid annotation with @NotBlank
         @WithMockUser
         @Test
-        @DisplayName("should return 400 (bad request) if dto is invalid")
+        @DisplayName("should return status 400 (bad request) if dto is invalid")
         void addRecipe_whenNullValue_thenReturns400() throws Exception {
             RecipeDto invalidRecipeDto = RecipeDto.builder()
                     .category("beverage")
@@ -149,36 +160,90 @@ class RecipeControllerTest {
 //        String expectedResponseBody = objectMapper.writeValueAsString(expectedErrorResponse);
 //        assertEquals(expectedResponseBody, actualResponseBody);
         }
+
+        @Test
+        @DisplayName("should not add new recipe and return status 401 (unauthorized) if user is unauthenticated")
+        void addRecipe_shouldReturn401ifUserUnauthorized() throws Exception {
+            when(recipeService.addRecipe(any())).thenReturn(1L);
+
+            RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
+            mockMvc.perform(
+                            MockMvcRequestBuilders
+                                    .post("/api/recipe/new")
+                                    .with(csrf())
+                                    .content(objectMapper.writeValueAsString(recipeDto))
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isUnauthorized());
+
+            verify(recipeService, never()).addRecipe(any());
+        }
     }
 
-    @WithMockUser
-    @Test
-    @DisplayName("#deleteRecipe(Long) should successfully delete recipe and return 204 (no content)")
-    void deleteRecipe_shouldDeleteRecipeAndReturnNoContentStatus() throws Exception {
-        doNothing().when(recipeService).deleteRecipe(any());
+    @Nested
+    @DisplayName("#deleteRecipe(Long)")
+    class DeleteRecipeMethodTest {
 
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .delete("/api/recipe/{id}", 1)
-                                .with(csrf())
-                )
-                .andExpect(status().isNoContent());
+        // Successful deletion of recipe (204, no content)
+        // and failed deletion of recipe (403, forbidden)
+        // are tested in IntegrationTest.class
+
+        @Test
+        @DisplayName("should not delete recipe and return status 401 (unauthorized) if user is unauthenticated")
+        void deleteRecipe_shouldNotDeleteRecipeAndReturn401Status() throws Exception {
+            mockMvc.perform(
+                            MockMvcRequestBuilders
+                                    .delete("/api/recipe/{id}", 1)
+                                    .with(csrf())
+                    )
+                    .andExpect(status().isUnauthorized());
+
+            verify(recipeService, never()).deleteRecipe(any());
+        }
     }
 
-    @WithMockUser
-    @Test
-    @DisplayName("#updateRecipe(Long, RecipeDto) should successfully update recipe and return 204 (no content)")
-    void updateRecipe_shouldUpdateRecipeAndReturnNoContentStatus() throws Exception {
-        doNothing().when(recipeService).updateRecipe(any(), any());
+    @Nested
+    @DisplayName("#updateRecipe(Long, RecipeDto)")
+    class UpdateRecipeMethodTest {
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .put("/api/recipe/{id}", 1)
-                        .with(csrf())
-                        .content(new ObjectMapper().writeValueAsString(TestUtil.getMockedRecipeDto()))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isNoContent());
+        @WithMockUser
+        @Test
+        @DisplayName("should successfully update recipe and return status 204 (no content)")
+        void updateRecipe_shouldUpdateRecipeAndReturnNoContentStatus() throws Exception {
+            RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
+
+            mockMvc.perform(MockMvcRequestBuilders
+                            .put("/api/recipe/{id}", 1)
+                            .with(csrf())
+                            .content(new ObjectMapper().writeValueAsString(recipeDto))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isNoContent());
+
+            ArgumentCaptor<RecipeDto> recipeCaptor = ArgumentCaptor.forClass(RecipeDto.class);
+            verify(recipeService).updateRecipe(eq(1L), recipeCaptor.capture());
+            assertEquals(recipeDto.getName(), recipeCaptor.getValue().getName());
+            assertEquals(recipeDto.getCategory(), recipeCaptor.getValue().getCategory());
+            assertEquals(recipeDto.getDirections(), recipeCaptor.getValue().getDirections());
+            assertEquals(recipeDto.getDescription(), recipeCaptor.getValue().getDescription());
+        }
+
+        @Test
+        @DisplayName("should not update recipe and return status 401 (unauthorized) if user is unauthenticated")
+        void updateRecipe_shouldNotUpdateRecipeAndReturn401Status() throws Exception {
+            mockMvc.perform(MockMvcRequestBuilders
+                            .put("/api/recipe/{id}", 1)
+                            .with(csrf())
+                            .content(new ObjectMapper().writeValueAsString(TestUtil.getMockedRecipeDto()))
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().isUnauthorized());
+
+            verify(recipeService, never()).updateRecipe(any(), any());
+        }
     }
 
     @Nested
@@ -224,6 +289,17 @@ class RecipeControllerTest {
                             .param("name", "tea")
                     )
                     .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("should return status 401 (unauthorized) if user is unauthenticated")
+        void searchRecipes_shouldReturnStatus401() throws Exception {
+
+            mockMvc.perform(MockMvcRequestBuilders
+                            .get("/api/recipe/search")
+                            .param("category", "beverage")
+                    )
+                    .andExpect(status().isUnauthorized());
         }
     }
 }
