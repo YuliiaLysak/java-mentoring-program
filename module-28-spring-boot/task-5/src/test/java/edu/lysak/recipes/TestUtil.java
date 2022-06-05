@@ -12,16 +12,10 @@ import java.util.stream.Collectors;
 
 public class TestUtil {
 
-    public static Recipe getMockedRecipe(Long id) {
-        Recipe mockedRecipe = getMockedRecipe();
-        mockedRecipe.setId(id);
-        return mockedRecipe;
-    }
-
     public static Recipe getMockedRecipe() {
         return Recipe.builder()
                 .name("Warming Ginger Tea")
-                .category("beverage")
+                .category("drink")
                 .date(LocalDateTime.now())
                 .description("description")
                 .ingredients(List.of())
@@ -31,11 +25,11 @@ public class TestUtil {
 
     public static RecipeDto getMockedRecipeDto() {
         return RecipeDto.builder()
-                .name("Warming Ginger Tea")
-                .category("beverage")
-                .description("description")
+                .name("test recipe name")
+                .category("test category")
+                .description("test description")
                 .ingredientsDto(List.of(getIngredientDto()))
-                .directions("directions")
+                .directions("test directions")
                 .build();
     }
 
@@ -49,16 +43,5 @@ public class TestUtil {
 
     public static Product getMockedProduct() {
         return new Product("milk");
-    }
-
-    public static List<Ingredient> getMockedIngredients(List<IngredientDto> ingredientsDto) {
-        return ingredientsDto.stream()
-                .map(it -> Ingredient.builder()
-                        .recipeId(1L)
-                        .product(getMockedProduct())
-                        .quantity(it.getQuantity())
-                        .measurementUnit(it.getMeasurementUnit())
-                        .build())
-                .collect(Collectors.toList());
     }
 }

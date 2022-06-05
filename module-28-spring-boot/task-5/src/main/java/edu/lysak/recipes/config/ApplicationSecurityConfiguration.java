@@ -39,6 +39,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .antMatchers("/info").hasAuthority("USER")
                 .anyRequest().authenticated()
                 .and()
+                .httpBasic()
+                .and()
                 .formLogin()
                 .loginPage("/login")
                 .failureHandler(loginFailureHandler)

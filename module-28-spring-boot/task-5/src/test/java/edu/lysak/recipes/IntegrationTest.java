@@ -7,7 +7,6 @@ import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.repository.IngredientRepository;
 import edu.lysak.recipes.repository.ProductRepository;
 import edu.lysak.recipes.repository.RecipeRepository;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,14 +17,12 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTest {
-
-    // TODO: 06.04.2022 fix tests after adding spring security
-    // check this course video:
-    // https://www.linkedin.com/learning/extending-securing-and-dockerizing-spring-boot-microservices/securing-apis?autoSkip=true&autoplay=true&dApp=53239054&leis=LAA&resume=false&u=2113185
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -40,33 +37,45 @@ public class IntegrationTest {
     private ProductRepository productRepository;
 
     @Test
-    @Order(1)
     void getRecipe_shouldSuccessfullyReturnRecipe() {
-        RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
-        restTemplate.postForEntity("/api/recipe/new", recipeDto, Map.class);
-        ResponseEntity<Recipe> recipe = restTemplate.getForEntity("/api/recipe/1", Recipe.class);
+        ResponseEntity<Recipe> recipe = restTemplate
+                .withBasicAuth("user@com.ua", "user")
+                // used id=1000 -> see migration script V1001__Add_test_recipe.sql
+                .getForEntity("/api/recipe/1000", Recipe.class);
 
         assertEquals(HttpStatus.OK, recipe.getStatusCode());
 
         assertNotNull(recipe.getBody());
-        assertEquals(recipeDto.getName(), recipe.getBody().getName());
-        assertEquals(recipeDto.getCategory(), recipe.getBody().getCategory());
-        assertEquals(recipeDto.getDescription(), recipe.getBody().getDescription());
-        assertEquals(recipeDto.getDirections(), recipe.getBody().getDirections());
+        assertEquals("name", recipe.getBody().getName());
+        assertEquals("category", recipe.getBody().getCategory());
+        assertEquals("description", recipe.getBody().getDescription());
+        assertEquals("directions", recipe.getBody().getDirections());
     }
 
     @Test
-    @Order(2)
+    void getRecipe_ifUserCredentialsNotProvided_shouldReturnUnauthorizedStatus() {
+        ResponseEntity<Recipe> recipe = restTemplate
+                // used id=1000 -> see migration script V1001__Add_test_recipe.sql
+                .getForEntity("/api/recipe/1000", Recipe.class);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, recipe.getStatusCode());
+    }
+
+    @Test
     void addRecipe_shouldSuccessfullyAddRecipe() {
         RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
-        ResponseEntity<Map> response = restTemplate.postForEntity("/api/recipe/new", recipeDto, Map.class);
+        ResponseEntity<Map> response = restTemplate
+                .withBasicAuth("user@com.ua", "user")
+                .postForEntity("/api/recipe/new", recipeDto, Map.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         Map body = response.getBody();
         assertNotNull(body);
-        assertEquals(2, body.get("id"));
+        // used id=3 because 2 recipes was added by migration in src/main/resources/db/migration
+        // and 1 recipe was added by migration in src/test/resources/db/migration but with id=1000
+        assertEquals(3, body.get("id"));
 
-        Optional<Recipe> recipe = recipeRepository.findById(2L);
+        Optional<Recipe> recipe = recipeRepository.findById(3L);
         assertTrue(recipe.isPresent());
         assertEquals(recipeDto.getName(), recipe.get().getName());
         assertEquals(recipeDto.getCategory(), recipe.get().getCategory());

@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,16 +28,19 @@ import java.util.List;
 import static edu.lysak.recipes.ResponseBodyMatchers.responseBody;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(RecipeController.class)
+@ContextConfiguration(classes = {
+        ControllerExceptionHandler.class,
+        RecipeController.class,
+})
 class RecipeControllerTest {
-
-    // TODO: 06.04.2022 fix tests after adding spring security
-    // check this course video:
-    // https://www.linkedin.com/learning/extending-securing-and-dockerizing-spring-boot-microservices/securing-apis?autoSkip=true&autoplay=true&dApp=53239054&leis=LAA&resume=false&u=2113185
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,6 +55,7 @@ class RecipeControllerTest {
     @DisplayName("#getRecipe(Long)")
     class GetRecipeMethodTest {
 
+        @WithMockUser
         @Test
         @DisplayName("should successfully return recipe")
         void getRecipe_shouldSuccessfullyReturnRecipe() throws Exception {
@@ -63,13 +69,14 @@ class RecipeControllerTest {
                     )
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("name").value("Warming Ginger Tea"))
-                    .andExpect(jsonPath("category").value("beverage"))
+                    .andExpect(jsonPath("category").value("drink"))
 //      OR          .andExpect(responseBody().containsObjectAsJson(expectedRecipe, Recipe.class));
                     .andReturn();
 
             assertEquals(mvcResult.getResponse().getContentAsString(), objectMapper.writeValueAsString(expectedRecipe));
         }
 
+        @WithMockUser
         @Test
         @DisplayName("should return 404 (not found) if recipe not found")
         void getRecipe_shouldReturn404ifRecipeNotFound() throws Exception {
@@ -84,6 +91,7 @@ class RecipeControllerTest {
     @DisplayName("#addRecipe(RecipeDto)")
     class AddRecipeMethodTest {
 
+        @WithMockUser
         @Test
         @DisplayName("should successfully add new recipe and return it's id")
         void addRecipe_shouldAddRecipeAndReturnId() throws Exception {
@@ -93,6 +101,7 @@ class RecipeControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders
                                     .post("/api/recipe/new")
+                                    .with(csrf())
                                     .content(objectMapper.writeValueAsString(recipeDto))
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .accept(MediaType.APPLICATION_JSON)
@@ -109,6 +118,7 @@ class RecipeControllerTest {
         }
 
         // testing @Valid annotation with @NotBlank
+        @WithMockUser
         @Test
         @DisplayName("should return 400 (bad request) if dto is invalid")
         void addRecipe_whenNullValue_thenReturns400() throws Exception {
@@ -121,6 +131,7 @@ class RecipeControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders
                                     .post("/api/recipe/new")
+                                    .with(csrf())
                                     .content(objectMapper.writeValueAsString(invalidRecipeDto))
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .accept(MediaType.APPLICATION_JSON)
@@ -140,15 +151,21 @@ class RecipeControllerTest {
         }
     }
 
+    @WithMockUser
     @Test
     @DisplayName("#deleteRecipe(Long) should successfully delete recipe and return 204 (no content)")
     void deleteRecipe_shouldDeleteRecipeAndReturnNoContentStatus() throws Exception {
         doNothing().when(recipeService).deleteRecipe(any());
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/recipe/{id}", 1))
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .delete("/api/recipe/{id}", 1)
+                                .with(csrf())
+                )
                 .andExpect(status().isNoContent());
     }
 
+    @WithMockUser
     @Test
     @DisplayName("#updateRecipe(Long, RecipeDto) should successfully update recipe and return 204 (no content)")
     void updateRecipe_shouldUpdateRecipeAndReturnNoContentStatus() throws Exception {
@@ -156,6 +173,7 @@ class RecipeControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/api/recipe/{id}", 1)
+                        .with(csrf())
                         .content(new ObjectMapper().writeValueAsString(TestUtil.getMockedRecipeDto()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -167,8 +185,9 @@ class RecipeControllerTest {
     @DisplayName("#searchRecipes(String, String)")
     class SearchRecipesMethodTest {
 
+        @WithMockUser
         @ParameterizedTest
-        @CsvSource({"category, beverage", "name, 'Warming Ginger Tea'"})
+        @CsvSource({"category, drink", "name, 'Warming Ginger Tea'"})
         @DisplayName("should successfully return list of recipes for particular category/name")
         void searchRecipes_shouldReturnListOfRecipesWithSpecificRequestParam(String paramName, String paramValue) throws Exception {
             when(recipeService.getRecipesByCategory(any())).thenReturn(List.of(TestUtil.getMockedRecipe()));
@@ -180,9 +199,10 @@ class RecipeControllerTest {
                     )
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.[0].name").value("Warming Ginger Tea"))
-                    .andExpect(jsonPath("$.[0].category").value("beverage"));
+                    .andExpect(jsonPath("$.[0].category").value("drink"));
         }
 
+        @WithMockUser
         @Test
         @DisplayName("should return 400 (bad request) if no request parameters are provided")
         void searchRecipes_shouldThrowExceptionIfNoRequestParam() throws Exception {
@@ -193,6 +213,7 @@ class RecipeControllerTest {
                     .andExpect(status().isBadRequest());
         }
 
+        @WithMockUser
         @Test
         @DisplayName("should return 400 (bad request) if both request parameters are provided")
         void searchRecipes_shouldThrowExceptionIfBothRequestParam() throws Exception {
