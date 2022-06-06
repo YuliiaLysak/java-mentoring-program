@@ -75,7 +75,7 @@ public class EventServiceImpl implements EventService {
 
     private Event mapEvent(EventRequest eventRequest) {
         Event event = new Event();
-        event.setTitle(eventRequest.getEventType());
+        event.setTitle(eventRequest.getTitle());
         event.setPlace(eventRequest.getPlace());
         event.setSpeaker(eventRequest.getSpeaker());
         event.setEventType(eventRequest.getEventType());
@@ -85,7 +85,7 @@ public class EventServiceImpl implements EventService {
 
     private EventResponse mapEventResponse(Event event) {
         EventResponse eventResponse = new EventResponse();
-        eventResponse.setTitle(event.getEventType());
+        eventResponse.setTitle(event.getTitle());
         eventResponse.setPlace(event.getPlace());
         eventResponse.setSpeaker(event.getSpeaker());
         eventResponse.setEventType(event.getEventType());
