@@ -60,6 +60,32 @@
             <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
+
+        <!--testing-->
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-test</artifactId>
+            <version>3.4.18</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-h2</artifactId>
+            <version>0.9.1.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.212</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.6.7</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -71,6 +97,14 @@
                 <artifactId>netty-common</artifactId>
                 <version>4.1.77.Final</version>
             </dependency>
+
+            <!--for resolving java.lang.NoClassDefFoundError: io/r2dbc/spi/TransactionDefinition in tests-->
+            <dependency>
+                <groupId>io.r2dbc</groupId>
+                <artifactId>r2dbc-spi</artifactId>
+                <version>1.0.0.RELEASE</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
