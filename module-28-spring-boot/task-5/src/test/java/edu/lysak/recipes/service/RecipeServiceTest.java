@@ -81,10 +81,10 @@ class RecipeServiceTest {
         ArgumentCaptor<Recipe> recipeCaptor = ArgumentCaptor.forClass(Recipe.class);
         verify(recipeRepository).save(recipeCaptor.capture());
         assertEquals(recipeCaptor.getValue().getId(), recipeId);
-        assertEquals(recipeCaptor.getValue().getName(), "Warming Ginger Tea");
-        assertEquals(recipeCaptor.getValue().getCategory(), "beverage");
-        assertEquals(recipeCaptor.getValue().getDescription(), "description");
-        assertEquals(recipeCaptor.getValue().getDirections(), "directions");
+        assertEquals("test recipe name", recipeCaptor.getValue().getName());
+        assertEquals("test category", recipeCaptor.getValue().getCategory());
+        assertEquals("test description", recipeCaptor.getValue().getDescription());
+        assertEquals("test directions", recipeCaptor.getValue().getDirections());
         verify(productService, times(recipeDto.getIngredientsDto().size())).saveAndGetProduct("milk");
 
         IngredientDto ingredientDto = recipeDto.getIngredientsDto().get(0);

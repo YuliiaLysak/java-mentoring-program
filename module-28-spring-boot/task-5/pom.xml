@@ -100,6 +100,12 @@
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>5.6.5</version>
+            <scope>test</scope>
+        </dependency>
 
 
 <!--        com.fasterxml.jackson.databind.exc.InvalidDefinitionException:

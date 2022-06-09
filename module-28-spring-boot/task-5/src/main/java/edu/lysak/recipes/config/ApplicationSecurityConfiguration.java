@@ -3,6 +3,7 @@ package edu.lysak.recipes.config;
 import edu.lysak.recipes.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,8 +37,11 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authorizeRequests()
                 .antMatchers("/", "/index", "/login", "/about", "/css/*", "/js/*").permitAll()
                 .antMatchers("/admin", "/api/blocked-users").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/recipe/*").hasAuthority("ADMIN")
                 .antMatchers("/info").hasAuthority("USER")
                 .anyRequest().authenticated()
+                .and()
+                .httpBasic()
                 .and()
                 .formLogin()
                 .loginPage("/login")

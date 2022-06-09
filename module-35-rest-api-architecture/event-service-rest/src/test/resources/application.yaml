@@ -21,6 +21,10 @@ spring:
 #    enabled: false
     locations: classpath:/db/migration,classpath:/db/test/migration
 
-login:
-  max-failed-attempts: 3
-  lock-time: 300000 # 5 minutes (5 * 60 * 1000)
+#console settings
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        trace: false

@@ -92,7 +92,7 @@ public class SportService {
                 .name(sportDto.getAttributes().getName())
                 .description(sportDto.getAttributes().getDescription())
                 .slug(sportDto.getAttributes().getSlug())
-                .icon(sportDto.getAttributes().getDescription())
+                .icon(sportDto.getAttributes().getIcon())
                 .build();
     }
 
