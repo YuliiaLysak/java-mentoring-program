@@ -1,5 +1,6 @@
 package edu.lysak.recipes.repository;
 
+import edu.lysak.recipes.model.NutritionalValue;
 import edu.lysak.recipes.model.Recipe;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -30,7 +31,8 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
             "r.category = :category," +
             "r.date = :date," +
             "r.description = :description," +
-            "r.directions = :directions" +
+            "r.directions = :directions," +
+            "r.nutritionalValue = :nutritionalValue" +
             " WHERE r.id = :id")
     void updateRecipe(
             @Param("id") Long id,
@@ -38,6 +40,7 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
             @Param("category") String category,
             @Param("date") LocalDateTime date,
             @Param("description") String description,
-            @Param("directions") String directions
+            @Param("directions") String directions,
+            @Param("nutritionalValue") NutritionalValue nutritionalValue
     );
 }

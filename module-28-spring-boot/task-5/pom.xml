@@ -159,6 +159,20 @@
                     </buildArgs>
                 </configuration>
             </plugin>
+
+            <!-- plugin for flyway, e.g using maven commands, such as:
+             'mvn flyway:info -Dflyway.user=${DATASOURCE_USERNAME} -Dflyway.password=${DATASOURCE_PASSWORD}'
+             'mvn flyway:repair -Dflyway.user=${DATASOURCE_USERNAME} -Dflyway.password=${DATASOURCE_PASSWORD}'
+              etc -->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>8.5.12</version>
+                <configuration>
+                    <url>jdbc:postgresql://localhost:5432/mentoring_recipes_db</url>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

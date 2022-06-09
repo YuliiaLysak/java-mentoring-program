@@ -30,7 +30,7 @@ public class IngredientRepositoryTest {
         Recipe recipe = TestUtil.getMockedRecipe();
         Long recipeId = recipeRepository.save(recipe).getId();
 
-        Product product = productRepository.save(new Product("milk"));
+        Product product = productRepository.save(TestUtil.getMockedProduct());
 
         ingredientRepository.save(Ingredient.builder()
                 .recipeId(recipeId)

@@ -2,6 +2,7 @@ package edu.lysak.recipes;
 
 import edu.lysak.recipes.dto.IngredientDto;
 import edu.lysak.recipes.dto.RecipeDto;
+import edu.lysak.recipes.model.NutritionalValue;
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.model.Ingredient;
@@ -20,6 +21,13 @@ public class TestUtil {
                 .description("description")
                 .ingredients(List.of())
                 .directions("directions")
+                .nutritionalValue(NutritionalValue.builder()
+                        .calories(100)
+                        .protein(20)
+                        .fat(10)
+                        .carbohydrate(20)
+                        .build()
+                )
                 .build();
     }
 
@@ -38,10 +46,25 @@ public class TestUtil {
                 .name("milk")
                 .quantity(200.0)
                 .measurementUnit("ml")
+                .nutritionalValue(NutritionalValue.builder()
+                        .calories(100)
+                        .protein(20)
+                        .fat(10)
+                        .carbohydrate(20)
+                        .build()
+                )
                 .build();
     }
 
     public static Product getMockedProduct() {
-        return new Product("milk");
+        Product product = new Product();
+        product.setName("milk");
+        product.setNutritionalValue(NutritionalValue.builder()
+                .calories(50)
+                .protein(30)
+                .fat(10)
+                .carbohydrate(10)
+                .build());
+        return product;
     }
 }

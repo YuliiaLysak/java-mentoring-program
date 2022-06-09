@@ -3,12 +3,11 @@ package edu.lysak.recipes.service;
 import edu.lysak.recipes.dto.IngredientDto;
 import edu.lysak.recipes.dto.RecipeDto;
 import edu.lysak.recipes.exception.RecipeNotFoundException;
+import edu.lysak.recipes.model.NutritionalValue;
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.repository.RecipeRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -30,6 +29,10 @@ public class RecipeService {
         this.productService = productService;
     }
 
+    public boolean isRecipeExist(Long recipeId) {
+        return recipeRepository.existsById(recipeId);
+    }
+
     public Recipe getRecipe(Long id) {
         return recipeRepository.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException(String.format("Recipe with id=%s not found", id)));
@@ -43,11 +46,17 @@ public class RecipeService {
                 .date(LocalDateTime.now())
                 .description(recipeDto.getDescription())
                 .directions(recipeDto.getDirections())
+                .nutritionalValue(NutritionalValue.builder()
+                        .calories(getTotalCalories(recipeDto.getIngredientsDto()))
+                        .protein(getTotalProtein(recipeDto.getIngredientsDto()))
+                        .fat(getTotalFat(recipeDto.getIngredientsDto()))
+                        .carbohydrate(getTotalCarbohydrate(recipeDto.getIngredientsDto()))
+                        .build())
                 .build();
         Long recipeId = recipeRepository.save(recipe).getId();
 
         recipeDto.getIngredientsDto().forEach(ingredientDto -> {
-            Product product = productService.saveAndGetProduct(ingredientDto.getName());
+            Product product = productService.saveAndGetProduct(ingredientDto);
             ingredientService.saveIngredientIfNotPresent(recipeId, ingredientDto, product);
         });
 
@@ -66,7 +75,13 @@ public class RecipeService {
                 recipeDto.getCategory(),
                 LocalDateTime.now(),
                 recipeDto.getDescription(),
-                recipeDto.getDirections()
+                recipeDto.getDirections(),
+                NutritionalValue.builder()
+                        .calories(getTotalCalories(recipeDto.getIngredientsDto()))
+                        .protein(getTotalProtein(recipeDto.getIngredientsDto()))
+                        .fat(getTotalFat(recipeDto.getIngredientsDto()))
+                        .carbohydrate(getTotalCarbohydrate(recipeDto.getIngredientsDto()))
+                        .build()
         );
     }
 
@@ -80,8 +95,40 @@ public class RecipeService {
 
     private void updateIngredients(Long recipeId, List<IngredientDto> ingredientDtos) {
         ingredientDtos.forEach(ingredientDto -> {
-            Product product = productService.saveAndGetProduct(ingredientDto.getName());
+            Product product = productService.saveAndGetProduct(ingredientDto);
             ingredientService.updateIngredientIfNotPresent(recipeId, ingredientDto, product);
         });
+    }
+
+    private Integer getTotalCalories(List<IngredientDto> ingredientsDto) {
+        return ingredientsDto.stream()
+                .map(IngredientDto::getNutritionalValue)
+                .map(NutritionalValue::getCalories)
+                .mapToInt(it -> it)
+                .sum();
+    }
+
+    private Integer getTotalProtein(List<IngredientDto> ingredientsDto) {
+        return ingredientsDto.stream()
+                .map(IngredientDto::getNutritionalValue)
+                .map(NutritionalValue::getProtein)
+                .mapToInt(it -> it)
+                .sum();
+    }
+
+    private Integer getTotalFat(List<IngredientDto> ingredientsDto) {
+        return ingredientsDto.stream()
+                .map(IngredientDto::getNutritionalValue)
+                .map(NutritionalValue::getFat)
+                .mapToInt(it -> it)
+                .sum();
+    }
+
+    private Integer getTotalCarbohydrate(List<IngredientDto> ingredientsDto) {
+        return ingredientsDto.stream()
+                .map(IngredientDto::getNutritionalValue)
+                .map(NutritionalValue::getCarbohydrate)
+                .mapToInt(it -> it)
+                .sum();
     }
 }

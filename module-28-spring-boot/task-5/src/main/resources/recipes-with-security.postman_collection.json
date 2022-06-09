@@ -1,0 +1,417 @@
+{
+	"info": {
+		"_postman_id": "360886cd-a199-44de-8182-f656c99af566",
+		"name": "recipes-with-security-(mentoring-program)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12145969"
+	},
+	"item": [
+		{
+			"name": "Get recipe by id",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "foobar",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "jdoe@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search recipe by name/category",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "yuliia",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/search?name=Warming%20Ginger%20Tea",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"search"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Warming%20Ginger%20Tea"
+						},
+						{
+							"key": "category",
+							"value": "beverage",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update recipe by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"UPD Tea\",\n    \"category\": \"beverage\",\n    \"date\": \"2021-06-10T10:50:00\",\n    \"description\": \"Light, aromatic and refreshing beverage\",\n    \"ingredients\": [\n        {\n            \"name\": \"boiled water\",\n            \"quantity\": 400000.0,\n            \"measurementUnit\": \"lalalala\"\n        },\n        {\n            \"name\": \"honey\",\n            \"quantity\": 10.0,\n            \"measurementUnit\": \"teaspoon\"\n        },\n        {\n            \"name\": \"fresh mint leaves\",\n            \"quantity\": 100.0,\n            \"measurementUnit\": \"gram\"\n        }\n    ],\n    \"directions\": \"UPD directions\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete recipe by id",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "yuliia@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new recipe (1)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "foobar",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "jdoe@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Warming Ginger Tea1\",\n    \"category\": \"beverage1\",\n    \"date\": \"2021-06-01T06:50:00\",\n    \"description\": \"Ginger tea is a warming drink for cool weather\",\n    \"ingredients\": [\n        {\n            \"name\": \"ginger root, minced\",\n            \"quantity\": 1.0,\n            \"measurementUnit\": \"inch\"\n        },\n        {\n            \"name\": \"lemon, juiced\",\n            \"quantity\": 0.5,\n            \"measurementUnit\": \"pcs\"\n        },\n        {\n            \"name\": \"manuka honey\",\n            \"quantity\": 0.5,\n            \"measurementUnit\": \"teaspoon\"\n        }\n    ],\n    \"directions\": \"Place all ingredients in a mug and fill with warm water (not too hot so you keep the beneficial honey compounds in tact); Steep for 5-10 minutes; Drink and enjoy\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new recipe (2)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "yuliia@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Pizza Margherita\",\n    \"category\": \"italian\",\n    \"date\": \"2022-06-09T10:50:00\",\n    \"description\": \"A typical Neapolitan pizza, made with tomatoes, mozzarella cheese, fresh basil, salt, and extra-virgin olive oil\",\n    \"ingredients\": [\n        {\n            \"name\": \"dough\",\n            \"quantity\": 1,\n            \"measurementUnit\": \"pack\",\n            \"nutritionalValue\": {\n                    \"calories\": 150,\n                    \"protein\": 4,\n                    \"fat\": 3,\n                    \"carbohydrate\": 27\n                }\n        },\n        {\n            \"name\": \"tomato\",\n            \"quantity\": 5,\n            \"measurementUnit\": \"pcs\",\n            \"nutritionalValue\": {\n                    \"calories\": 18,\n                    \"protein\": 1,\n                    \"fat\": 1,\n                    \"carbohydrate\": 4\n                }\n        },\n        {\n            \"name\": \"mozzarella\",\n            \"quantity\": 1,\n            \"measurementUnit\": \"pack\",\n            \"nutritionalValue\": {\n                    \"calories\": 85,\n                    \"protein\": 6,\n                    \"fat\": 6,\n                    \"carbohydrate\": 1\n                }\n        },\n        {\n            \"name\": \"basil\",\n            \"quantity\": 50.0,\n            \"measurementUnit\": \"gram\",\n            \"nutritionalValue\": {\n                    \"calories\": 22,\n                    \"protein\": 3,\n                    \"fat\": 0,\n                    \"carbohydrate\": 3\n                }\n        },\n        {\n            \"name\": \"olive oil\",\n            \"quantity\": 3,\n            \"measurementUnit\": \"tbsp\",\n            \"nutritionalValue\": {\n                    \"calories\": 119,\n                    \"protein\": 0,\n                    \"fat\": 14,\n                    \"carbohydrate\": 0\n                }\n        }\n    ],\n    \"directions\": \"Preheat oven to 400; Unroll crust dough onto a baking sheet coated with cooking spray; Bake at 400° for 8 minutes; Remove crust from oven, and brush with 1/2 teaspoon oil; Arrange tomato slices on crust, leaving a 1/2-inch border; Sprinkle evenly with mozzarella; Bake at 400° for 12 minutes or until cheese melts and crust is golden; Combine 1/2 teaspoon oil and vinegar, stirring with a whisk; Sprinkle pizza evenly with sliced basil, salt, and pepper. Drizzle the vinegar mixture evenly over the pizza. Cut pizza into 8 pieces\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add review",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "yuliia@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"rating\": 4,\n    \"comment\": \"Pizza is amazing!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/3/review",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"3",
+						"review"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete review",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "yuliia@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/1/review/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"1",
+						"review",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add question",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "yuliia@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"question\": \"Can you share a recipe for the crust dough?\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/3/question",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"3",
+						"question"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete question",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "password",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "yuliia@com.ua",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/recipe/1/question/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"recipe",
+						"1",
+						"question",
+						"8"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

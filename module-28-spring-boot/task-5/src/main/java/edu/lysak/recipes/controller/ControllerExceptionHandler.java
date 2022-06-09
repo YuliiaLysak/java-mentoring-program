@@ -1,6 +1,9 @@
 package edu.lysak.recipes.controller;
 
+import edu.lysak.recipes.exception.IllegalActionException;
+import edu.lysak.recipes.exception.QuestionNotFoundException;
 import edu.lysak.recipes.exception.RecipeNotFoundException;
+import edu.lysak.recipes.exception.ReviewNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +22,14 @@ import java.util.List;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler(RecipeNotFoundException.class)
-    public ResponseEntity<Object> handleRecipeNotFoundException(RecipeNotFoundException exception) {
+    @ExceptionHandler({RecipeNotFoundException.class, ReviewNotFoundException.class, QuestionNotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundException(RuntimeException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalActionException.class)
+    public ResponseEntity<Object> handleIllegalActionException(IllegalActionException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.FORBIDDEN);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
