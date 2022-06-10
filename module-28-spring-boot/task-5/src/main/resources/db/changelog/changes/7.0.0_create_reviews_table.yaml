@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: "create-reviews-table"
+      author: "YuliiaLysak"
+      changes:
+        - createTable:
+            tableName: "reviews"
+            columns:
+              - column:
+                  name: "review_id"
+                  type: "bigserial"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "user_id"
+                  type: "int8"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "recipe_id"
+                  type: "int8"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "rating"
+                  type: "int4"
+                  defaultValue: "0"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "comment"
+                  type: "varchar(4000)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "date"
+                  type: "timestamp"
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: questions
+            constraintName: fk_review_user_id
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: recipe_id
+            baseTableName: questions
+            constraintName: fk_review_recipe_id
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: recipes

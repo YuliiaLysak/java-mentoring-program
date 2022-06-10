@@ -1,0 +1,111 @@
+databaseChangeLog:
+  - changeSet:
+      id: "create-table-recipes"
+      author: "YuliiaLysak"
+      changes:
+        - createTable:
+            tableName: "recipes"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigserial"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "name"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "category"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "description"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "directions"
+                  type: "VARCHAR(4000)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "date"
+                  type: "timestamp"
+        - addUniqueConstraint:
+            columnNames: name, category
+            constraintName: unique_name_category
+            tableName: recipes
+  - changeSet:
+      id: "create-table-products"
+      author: "YuliiaLysak"
+      changes:
+        - createTable:
+            tableName: "products"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigserial"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "name"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+                    unique: true
+  - changeSet:
+      id: "create-table-ingredients"
+      author: "YuliiaLysak"
+      changes:
+        - createTable:
+            tableName: "ingredients"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigserial"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "recipe_id"
+                  type: "int8"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "product_id"
+                  type: "int8"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "quantity"
+                  type: "float8"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "measurement_unit"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            columnNames: recipe_id, product_id
+            constraintName: unique_recipe_product
+            tableName: ingredients
+        - addForeignKeyConstraint:
+            baseColumnNames: recipe_id
+            baseTableName: ingredients
+            constraintName: fk_recipe_id
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: recipes
+        - addForeignKeyConstraint:
+            baseColumnNames: product_id
+            baseTableName: ingredients
+            constraintName: fk_product_id
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: products

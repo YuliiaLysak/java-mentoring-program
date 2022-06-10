@@ -1,0 +1,80 @@
+databaseChangeLog:
+  - changeSet:
+      id: "add-test-recipe"
+      author: "YuliiaLysak"
+      changes:
+        - insert:
+            tableName: recipes
+            columns:
+              - column:
+                  name: id
+                  value: "1000"
+              - column:
+                  name: name
+                  value: "name"
+              - column:
+                  name: category
+                  value: "category"
+              - column:
+                  name: date
+                  value: "2021-06-01 06:50"
+              - column:
+                  name: description
+                  value: "description"
+              - column:
+                  name: directions
+                  value: "directions"
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: "1000"
+              - column:
+                  name: name
+                  value: "product1"
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  value: "1001"
+              - column:
+                  name: name
+                  value: "product2"
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: id
+                  value: "1000"
+              - column:
+                  name: recipe_id
+                  value: "1000"
+              - column:
+                  name: product_id
+                  value: "1000"
+              - column:
+                  name: quantity
+                  value: "1.0"
+              - column:
+                  name: measurement_unit
+                  value: "inch"
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: id
+                  value: "1001"
+              - column:
+                  name: recipe_id
+                  value: "1000"
+              - column:
+                  name: product_id
+                  value: "1001"
+              - column:
+                  name: quantity
+                  value: "0.5"
+              - column:
+                  name: measurement_unit
+                  value: "pcs"

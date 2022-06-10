@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: "create-table-users"
+      author: "YuliiaLysak"
+      changes:
+        - createTable:
+            tableName: "users"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigserial"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "email"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: "password"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: "insert-into-users"
+      author: "YuliiaLysak"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "yuliia@com.ua"
+              - column:
+                  name: password
+                  value: "$2a$11$dp4wMyuqYE3KSwIyQmWZFeUb7jCsHAdk7ZhFc0qGw6i5J124imQBi"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "jdoe@com.ua"
+              - column:
+                  name: password
+                  value: "$2a$11$3NO32OV1TGjap3xMpAEjmuiizitWuaSwUYz42aMtlxRliwJ8zm4Sm"

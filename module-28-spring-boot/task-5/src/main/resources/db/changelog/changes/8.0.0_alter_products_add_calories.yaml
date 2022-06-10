@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: "alter-products-add-calories"
+      author: "YuliiaLysak"
+      changes:
+        - addColumn:
+            tableName: products
+            columns:
+              - column:
+                  name: calories
+                  type: int4
+                  defaultValue: "0"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: protein
+                  type: int4
+                  defaultValue: "0"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fat
+                  type: int4
+                  defaultValue: "0"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: carbohydrate
+                  type: int4
+                  defaultValue: "0"
+                  constraints:
+                    nullable: false

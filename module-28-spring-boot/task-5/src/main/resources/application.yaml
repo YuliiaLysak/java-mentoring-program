@@ -17,6 +17,13 @@ spring:
       ddl-auto: validate # Hibernate ddl auto (create, create-drop, validate, update)
     show-sql: false
 
+#migration settings
+  flyway:
+    enabled: false
+  liquibase:
+    enabled: true
+    changeLog: classpath:/db/changelog/db.changelog-master.yaml
+
 login:
   max-failed-attempts: 3
   lock-time: 300000 # 5 minutes (5 * 60 * 1000)

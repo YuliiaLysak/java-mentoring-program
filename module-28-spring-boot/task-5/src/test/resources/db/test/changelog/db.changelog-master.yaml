@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - includeAll:
+      path: classpath:/db/changelog/changes
+  - includeAll:
+      path: classpath:/db/test/changelog/changes
+
+# All migrations from /db/changelog/changes will be executed, THEN those inside /db/test/changelog/changes
+# If a script from /db/test/changelog/changes must be executed before a script from /db/changelog/changes, it doesn't seem to be possible

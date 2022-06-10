@@ -12,9 +12,10 @@
     <artifactId>task-5</artifactId>
 
     <properties>
-        <flyway-core.version>8.5.7</flyway-core.version>
+        <flyway.version>8.5.12</flyway.version>
         <postgresql.version>42.3.3</postgresql.version>
         <thymeleaf-springsecurity5.version>3.0.4.RELEASE</thymeleaf-springsecurity5.version>
+        <liquibase.version>4.11.0</liquibase.version>
     </properties>
 
     <dependencies>
@@ -41,7 +42,12 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>${flyway-core.version}</version>
+            <version>${flyway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
         </dependency>
 
         <!-- Security -->
@@ -167,9 +173,27 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>8.5.12</version>
+                <version>${flyway.version}</version>
                 <configuration>
                     <url>jdbc:postgresql://localhost:5432/mentoring_recipes_db</url>
+                </configuration>
+            </plugin>
+
+            <!-- plugin for liquibase, e.g. using maven commands, such as:
+             'mvn liquibase:generateChangeLog -Dmaven.test.skip=true'
+             'mvn liquibase:diff -Dmaven.test.skip=true'-->
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${liquibase.version}</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <url>jdbc:postgresql://localhost:5432/mentoring_recipes_db</url>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
+                    <outputChangeLogFile>${project.basedir}/src/main/resources/db/changelog/db.changelog-init.yaml</outputChangeLogFile>
+                    <diffChangeLogFile>${project.basedir}/src/main/resources/db/changelog/db.changelog-diff.yaml</diffChangeLogFile>
+                    <migrationSqlOutputFile>${project.basedir}/src/main/resources/db/changelog/migration.sql</migrationSqlOutputFile>
+                    <logging>debug</logging>
                 </configuration>
             </plugin>
 

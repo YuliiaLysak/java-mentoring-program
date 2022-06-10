@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: "create-table-auth_user_group"
+      author: "YuliiaLysak"
+      changes:
+        - createTable:
+            tableName: "auth_user_group"
+            columns:
+              - column:
+                  name: "id"
+                  type: "bigserial"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "email"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "auth_group"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            columnNames: email, auth_group
+            constraintName: unique_email_auth_group
+            tableName: auth_user_group
+        - addForeignKeyConstraint:
+            baseColumnNames: email
+            baseTableName: auth_user_group
+            constraintName: user_auth_user_group_fk
+            onDelete: CASCADE
+            referencedColumnNames: email
+            referencedTableName: users
+  - changeSet:
+      id: "insert-into-auth_user_group"
+      author: "YuliiaLysak"
+      changes:
+        - insert:
+            tableName: auth_user_group
+            columns:
+              - column:
+                  name: email
+                  value: "yuliia@com.ua"
+              - column:
+                  name: auth_group
+                  value: "USER"
+        - insert:
+            tableName: auth_user_group
+            columns:
+              - column:
+                  name: email
+                  value: "yuliia@com.ua"
+              - column:
+                  name: auth_group
+                  value: "ADMIN"
+        - insert:
+            tableName: auth_user_group
+            columns:
+              - column:
+                  name: email
+                  value: "jdoe@com.ua"
+              - column:
+                  name: auth_group
+                  value: "USER"
