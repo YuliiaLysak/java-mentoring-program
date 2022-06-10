@@ -1,5 +1,7 @@
 package edu.lysak.recipes.service;
 
+import edu.lysak.recipes.dto.IngredientDto;
+import edu.lysak.recipes.model.NutritionalValue;
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,20 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
-    public Product saveAndGetProduct(String name) {
-        return getProductByName(name)
-                .orElseGet(() -> addProduct(new Product(name)));
+    public Product saveAndGetProduct(IngredientDto ingredientDto) {
+        return getProductByName(ingredientDto.getName())
+                .orElseGet(() -> {
+                    NutritionalValue nutritionalValue = ingredientDto.getNutritionalValue();
+                    Product product = new Product();
+                    product.setName(ingredientDto.getName());
+                    product.setNutritionalValue(NutritionalValue.builder()
+                            .calories(nutritionalValue.getCalories())
+                            .protein(nutritionalValue.getProtein())
+                            .fat(nutritionalValue.getFat())
+                            .carbohydrate(nutritionalValue.getCarbohydrate())
+                            .build());
+                    return addProduct(product);
+                });
     }
 
     public Product addProduct(Product product) {

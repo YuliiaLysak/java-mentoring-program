@@ -38,7 +38,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .antMatchers("/", "/index", "/login", "/about", "/css/*", "/js/*").permitAll()
                 .antMatchers("/admin", "/api/blocked-users").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/recipe/*").hasAuthority("ADMIN")
-                .antMatchers("/info").hasAuthority("USER")
+                .antMatchers("/info", "/api/recipe/{recipeId}/review/*", "/api/recipe/{recipeId}/question/*").hasAuthority("USER")
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()

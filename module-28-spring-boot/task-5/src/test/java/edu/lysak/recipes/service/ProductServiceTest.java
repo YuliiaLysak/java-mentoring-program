@@ -1,5 +1,6 @@
 package edu.lysak.recipes.service;
 
+import edu.lysak.recipes.TestUtil;
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.repository.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +51,7 @@ class ProductServiceTest {
             Product product = new Product("milk");
             when(productRepository.findByName(any())).thenReturn(Optional.of(product));
 
-            Product productFromDb = productService.saveAndGetProduct("milk");
+            Product productFromDb = productService.saveAndGetProduct(TestUtil.getIngredientDto());
 
             verify(productRepository).findByName("milk");
             verify(productRepository, never()).save(any());
@@ -63,7 +64,7 @@ class ProductServiceTest {
             when(productRepository.findByName(any())).thenReturn(Optional.empty());
             when(productRepository.save(any())).thenAnswer(returnsArgAt(0));
 
-            Product savedProduct = productService.saveAndGetProduct("milk");
+            Product savedProduct = productService.saveAndGetProduct(TestUtil.getIngredientDto());
 
             verify(productRepository).findByName("milk");
             verify(productRepository).save(savedProduct);

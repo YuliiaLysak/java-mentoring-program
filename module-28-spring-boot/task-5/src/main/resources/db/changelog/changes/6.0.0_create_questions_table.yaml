@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: "create-questions-table"
+      author: "YuliiaLysak"
+      changes:
+        - createTable:
+            tableName: "questions"
+            columns:
+              - column:
+                  name: "question_id"
+                  type: "bigserial"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: "user_id"
+                  type: "int8"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "recipe_id"
+                  type: "int8"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "question"
+                  type: "varchar(4000)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "date"
+                  type: "timestamp"
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: questions
+            constraintName: fk_question_user_id
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: users
+        - addForeignKeyConstraint:
+            baseColumnNames: recipe_id
+            baseTableName: questions
+            constraintName: fk_question_recipe_id
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: recipes

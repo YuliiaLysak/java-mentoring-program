@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: "alter-users-table"
+      author: "YuliiaLysak"
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: account_non_locked
+                  type: boolean
+                  defaultValue: "true"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: failed_attempt
+                  type: int4
+                  defaultValue: "0"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lock_time
+                  type: timestamp
+                  defaultValue: "null"

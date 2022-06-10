@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: "add-test-admin-and-user"
+      author: "YuliiaLysak"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "user@com.ua"
+              - column:
+                  name: password
+                  value: "$2a$11$X.wpEgoasigk9RphYEVw3OZI8TaV7Sop7KcEgSMRguw6FcSvVQkNO"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "admin@com.ua"
+              - column:
+                  name: password
+                  value: "$2a$11$k9E5Vl/1WTv7mLEe/zUQuOG4.2I4znNQQc3jWqqiAyNj/tsPZMp0G"
+        - insert:
+            tableName: auth_user_group
+            columns:
+              - column:
+                  name: email
+                  value: "user@com.ua"
+              - column:
+                  name: auth_group
+                  value: "USER"
+        - insert:
+            tableName: auth_user_group
+            columns:
+              - column:
+                  name: email
+                  value: "admin@com.ua"
+              - column:
+                  name: auth_group
+                  value: "USER"
+        - insert:
+            tableName: auth_user_group
+            columns:
+              - column:
+                  name: email
+                  value: "admin@com.ua"
+              - column:
+                  name: auth_group
+                  value: "ADMIN"

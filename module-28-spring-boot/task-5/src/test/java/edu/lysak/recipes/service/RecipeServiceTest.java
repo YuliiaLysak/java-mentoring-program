@@ -4,6 +4,7 @@ import edu.lysak.recipes.TestUtil;
 import edu.lysak.recipes.dto.IngredientDto;
 import edu.lysak.recipes.dto.RecipeDto;
 import edu.lysak.recipes.exception.RecipeNotFoundException;
+import edu.lysak.recipes.model.NutritionalValue;
 import edu.lysak.recipes.model.Product;
 import edu.lysak.recipes.model.Recipe;
 import edu.lysak.recipes.repository.RecipeRepository;
@@ -20,10 +21,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.AdditionalAnswers.returnsArgAt;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeServiceTest {
@@ -85,7 +92,7 @@ class RecipeServiceTest {
         assertEquals("test category", recipeCaptor.getValue().getCategory());
         assertEquals("test description", recipeCaptor.getValue().getDescription());
         assertEquals("test directions", recipeCaptor.getValue().getDirections());
-        verify(productService, times(recipeDto.getIngredientsDto().size())).saveAndGetProduct("milk");
+        verify(productService, times(recipeDto.getIngredientsDto().size())).saveAndGetProduct(any(IngredientDto.class));
 
         IngredientDto ingredientDto = recipeDto.getIngredientsDto().get(0);
         verify(ingredientService).saveIngredientIfNotPresent(recipeId, ingredientDto, product);
@@ -106,20 +113,28 @@ class RecipeServiceTest {
     void updateRecipe_shouldSuccessfullyUpdateRecipe() {
         when(productService.saveAndGetProduct(any())).thenReturn(new Product());
         doNothing().when(ingredientService).updateIngredientIfNotPresent(any(), any(), any());
-        doNothing().when(recipeRepository).updateRecipe(any(), any(), any(), any(), any(), any());
+        doNothing().when(recipeRepository).updateRecipe(any(), any(), any(), any(), any(), any(), any());
 
         RecipeDto recipeDto = TestUtil.getMockedRecipeDto();
         recipeService.updateRecipe(1L, recipeDto);
 
         ArgumentCaptor<LocalDateTime> timeCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
+        ArgumentCaptor<NutritionalValue> nutritionCaptor = ArgumentCaptor.forClass(NutritionalValue.class);
         verify(recipeRepository).updateRecipe(
                 eq(1L),
                 eq(recipeDto.getName()),
                 eq(recipeDto.getCategory()),
                 timeCaptor.capture(),
                 eq(recipeDto.getDescription()),
-                eq(recipeDto.getDirections())
+                eq(recipeDto.getDirections()),
+                nutritionCaptor.capture()
         );
+
+        NutritionalValue nutritionalValue = nutritionCaptor.getValue();
+        assertEquals(100, nutritionalValue.getCalories());
+        assertEquals(20, nutritionalValue.getProtein());
+        assertEquals(10, nutritionalValue.getFat());
+        assertEquals(20, nutritionalValue.getCarbohydrate());
     }
 
     @Test

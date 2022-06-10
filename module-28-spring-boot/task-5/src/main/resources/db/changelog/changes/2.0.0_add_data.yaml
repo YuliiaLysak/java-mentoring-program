@@ -1,0 +1,175 @@
+databaseChangeLog:
+  - changeSet:
+      id: "insert-into-recipes"
+      author: "YuliiaLysak"
+      changes:
+        - insert:
+            tableName: recipes
+            columns:
+              - column:
+                  name: name
+                  value: "Warming Ginger Tea"
+              - column:
+                  name: category
+                  value: "beverage"
+              - column:
+                  name: date
+                  value: "2021-06-01 06:50"
+              - column:
+                  name: description
+                  value: "Ginger tea is a warming drink for cool weather"
+              - column:
+                  name: directions
+                  value: "Place all ingredients in a mug and fill with warm water (not too hot so you keep the beneficial honey compounds in tact); Steep for 5-10 minutes; Drink and enjoy"
+        - insert:
+            tableName: recipes
+            columns:
+              - column:
+                  name: name
+                  value: "Fresh Mint Tea"
+              - column:
+                  name: category
+                  value: "beverage"
+              - column:
+                  name: date
+                  value: "2021-06-10 10:50"
+              - column:
+                  name: description
+                  value: "Light, aromatic and refreshing beverage"
+              - column:
+                  name: directions
+                  value: "Boil water; Pour boiling hot water into a mug; Add fresh mint leaves; Mix and let the mint leaves seep for 3-5 minutes; Add honey and mix again"
+  - changeSet:
+      id: "insert-into-products"
+      author: "YuliiaLysak"
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "boiled water"
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "honey"
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "fresh mint leaves"
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "ginger root, minced"
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "lemon, juiced"
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: name
+                  value: "manuka honey"
+  - changeSet:
+      id: "insert-into-ingredients"
+      author: "YuliiaLysak"
+      changes:
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: recipe_id
+                  value: "1"
+              - column:
+                  name: product_id
+                  value: "4"
+              - column:
+                  name: quantity
+                  value: "1.0"
+              - column:
+                  name: measurement_unit
+                  value: "inch"
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: recipe_id
+                  value: "1"
+              - column:
+                  name: product_id
+                  value: "5"
+              - column:
+                  name: quantity
+                  value: "0.5"
+              - column:
+                  name: measurement_unit
+                  value: "pcs"
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: recipe_id
+                  value: "1"
+              - column:
+                  name: product_id
+                  value: "6"
+              - column:
+                  name: quantity
+                  value: "0.5"
+              - column:
+                  name: measurement_unit
+                  value: "teaspoon"
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: recipe_id
+                  value: "2"
+              - column:
+                  name: product_id
+                  value: "1"
+              - column:
+                  name: quantity
+                  value: "200"
+              - column:
+                  name: measurement_unit
+                  value: "ml"
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: recipe_id
+                  value: "2"
+              - column:
+                  name: product_id
+                  value: "2"
+              - column:
+                  name: quantity
+                  value: "1"
+              - column:
+                  name: measurement_unit
+                  value: "teaspoon"
+        - insert:
+            tableName: ingredients
+            columns:
+              - column:
+                  name: recipe_id
+                  value: "2"
+              - column:
+                  name: product_id
+                  value: "3"
+              - column:
+                  name: quantity
+                  value: "10"
+              - column:
+                  name: measurement_unit
+                  value: "gram"
