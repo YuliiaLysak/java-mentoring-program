@@ -22,7 +22,11 @@ import java.util.List;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler({RecipeNotFoundException.class, ReviewNotFoundException.class, QuestionNotFoundException.class})
+    @ExceptionHandler({
+            RecipeNotFoundException.class,
+            ReviewNotFoundException.class,
+            QuestionNotFoundException.class
+    })
     public ResponseEntity<Object> handleNotFoundException(RuntimeException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
