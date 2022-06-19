@@ -14,9 +14,6 @@ spring:
     # using test migration because of syntax conflict during 'ALTER TABLE sport DROP CONSTRAINT sport_pkey'
     locations: classpath:/db/test/migration
 
-  profiles:
-    active: Rest # Task
-
 test:
   db:
     file-path: ./tmp/test_sport_db
