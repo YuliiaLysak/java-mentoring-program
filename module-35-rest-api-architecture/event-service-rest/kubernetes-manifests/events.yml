@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: events
+  template:
+    metadata:
+      labels:
+        app: events
+    spec:
+      containers:
+        - name: events-container
+          image: events-image
+          # using 'imagePullPolicy: Never' for local deployment without docker registry
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: "http"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: events
+spec:
+  selector:
+    app: events
+  ports:
+    - name: "http"
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
