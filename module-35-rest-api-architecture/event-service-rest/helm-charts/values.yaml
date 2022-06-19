@@ -1,0 +1,13 @@
+events:
+  image: events-image
+  replicaCount: 1
+
+image:
+  tag: latest
+  # using 'imagePullPolicy: Never' for local deployment without docker registry
+  pullPolicy: IfNotPresent #Never #Always
+
+service:
+  type: LoadBalancer
+  externalPort: 8080
+  internalPort: 8080
