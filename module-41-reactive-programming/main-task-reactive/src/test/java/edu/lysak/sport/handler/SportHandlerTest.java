@@ -28,7 +28,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {SportRouter.class, SportHandler.class})
-//@Profile("Rest")
 @WebFluxTest
 class SportHandlerTest {
 

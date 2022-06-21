@@ -1,0 +1,5 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://local-postgres:5432/sport_db
+  flyway:
+    url: jdbc:postgresql://local-postgres:5432/sport_db

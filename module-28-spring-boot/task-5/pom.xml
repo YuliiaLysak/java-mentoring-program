@@ -166,6 +166,46 @@
                 </configuration>
             </plugin>
 
+            <!-- another plugin for building Docker image -->
+            <!-- run 'mvn package' to build docker image -->
+            <!-- run 'mvn install' to start docker container -->
+<!--            <plugin>-->
+<!--                <groupId>io.fabric8</groupId>-->
+<!--                <artifactId>docker-maven-plugin</artifactId>-->
+<!--                <version>0.40.1</version>-->
+<!--                <configuration>-->
+<!--                    <images>-->
+<!--                        <image>-->
+<!--                            <name>recipes2</name>-->
+<!--                            <build>-->
+<!--                                <from>openjdk:17</from>-->
+<!--                                <assembly>-->
+<!--                                    <descriptorRef>artifact</descriptorRef>-->
+<!--                                </assembly>-->
+<!--                                <cmd>java -jar maven/${project.name}-${project.version}.jar</cmd>-->
+<!--                            </build>-->
+<!--                        </image>-->
+<!--                    </images>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>docker:build</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>docker:start</id>-->
+<!--                        <phase>install</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>run</goal>-->
+<!--                            <goal>logs</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
             <!-- plugin for flyway, e.g using maven commands, such as:
              'mvn flyway:info -Dflyway.user=${DATASOURCE_USERNAME} -Dflyway.password=${DATASOURCE_PASSWORD}'
              'mvn flyway:repair -Dflyway.user=${DATASOURCE_USERNAME} -Dflyway.password=${DATASOURCE_PASSWORD}'

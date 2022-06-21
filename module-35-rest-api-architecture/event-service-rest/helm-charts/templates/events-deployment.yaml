@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events
+  labels:
+    name: events
+    {{- template "labels" . }}
+spec:
+  replicas: {{ .Values.events.replicaCount }}
+  selector:
+    matchLabels:
+      app: events
+  template:
+    metadata:
+      labels:
+        app: events
+    spec:
+      containers:
+        - name: events
+          image: "{{ .Values.events.image }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.internalPort }}
+              protocol: TCP

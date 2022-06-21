@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: events
+  template:
+    metadata:
+      labels:
+        app: events
+    spec:
+      containers:
+      - name: events-container
+        image: events-image
+        # using 'imagePullPolicy: Never' for local deployment without docker registry
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+          name: "http"

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sport-app-reactive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sport-app-reactive
+  template:
+    metadata:
+      labels:
+        app: sport-app-reactive
+    spec:
+      containers:
+        - name: sport-container
+          image: sport-image
+          # using 'imagePullPolicy: Never' for local deployment without docker registry
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: docker
+            - name: DATASOURCE_USERNAME
+              value: ${DATASOURCE_USERNAME}
+            - name: DATASOURCE_PASSWORD
+              value: ${DATASOURCE_PASSWORD}
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hostname-config
+                  key: postgres_host

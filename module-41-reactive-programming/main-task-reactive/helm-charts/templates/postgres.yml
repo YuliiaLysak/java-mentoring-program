@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-instance
+  labels:
+    name: postgres-instance
+    {{- template "labels" . }}
+spec:
+  selector:
+    app: postgres-instance
+  ports:
+    - port: {{ .Values.postgres.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-instance
+  labels:
+    name: postgres-instance
+    {{- template "labels" . }}
+spec:
+  selector:
+    matchLabels:
+      app: postgres-instance
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres-instance
+    spec:
+      containers:
+        - name: postgres-container
+          image: "{{ .Values.postgres.image }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: POSTGRES_USER
+              value: ${DATASOURCE_USERNAME}
+            - name: POSTGRES_PASSWORD
+              value: ${DATASOURCE_PASSWORD}
+            - name: POSTGRES_DB
+              value: sport_db
+          ports:
+            - containerPort: {{ .Values.postgres.port }}
+              name: postgres-inst

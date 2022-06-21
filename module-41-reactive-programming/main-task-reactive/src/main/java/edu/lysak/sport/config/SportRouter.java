@@ -3,7 +3,6 @@ package edu.lysak.sport.config;
 import edu.lysak.sport.handler.SportHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RequestPredicate;
 import org.springframework.web.reactive.function.server.RequestPredicates;
@@ -22,7 +21,6 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class SportRouter {
 
     @Bean
-    @Profile("Task")
     public RouterFunction<ServerResponse> routes(SportHandler sportHandler) {
 
         RequestPredicate getSportRoute = RequestPredicates
@@ -49,7 +47,6 @@ public class SportRouter {
     }
 
     @Bean
-    @Profile("Rest")
     RouterFunction<ServerResponse> restRoutes(SportHandler handler) {
         return RouterFunctions
                 .route(GET("/handler/sports")
