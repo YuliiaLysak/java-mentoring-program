@@ -24,15 +24,18 @@ Replace spring.r2dbc.url and spring.flyway.url in application.yaml to use postgr
 ##Run Docker container from image
 ###1. Run
 <span style="color:red">Replace ${DATASOURCE_USERNAME} and ${DATASOURCE_PASSWORD} environment variable with values</span><br>
-```docker run --env SPRING_PROFILES_ACTIVE=docker --env DATASOURCE_USERNAME=${DATASOURCE_USERNAME} --env DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD} --name <container-name> -p8080:8080 --link local-postgres:postgres <image-name>```
+```docker run --env SPRING_PROFILES_ACTIVE=docker --env DATASOURCE_USERNAME=${DATASOURCE_USERNAME} --env DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD} --env POSTGRES_HOST=local-postgres --name sport-container -p8080:8080 --link local-postgres:postgres sport-image```
 
 ###2. Run with memory settings (first rebuild image using another docker file)
 **Build jar:** ```mvn clean package```<br>
 **Build docker image:** ```docker build -f ExecDockerfile -t sport-memory-settings .```<br>
 **Run docker container:**
 <span style="color:red">(first replace ${DATASOURCE_USERNAME} and ${DATASOURCE_PASSWORD} environment variable with values)</span><br>
-```docker run --env SPRING_PROFILES_ACTIVE=docker --env JAVA_OPTS='-Xmx3g -Xms3g' --env DATASOURCE_USERNAME=${DATASOURCE_USERNAME} --env DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD} --name sport-container-memory-settings -p8080:8080 --link local-postgres:postgres sport-memory-settings```
+```docker run --env SPRING_PROFILES_ACTIVE=docker --env JAVA_OPTS='-Xmx3g -Xms3g' --env DATASOURCE_USERNAME=${DATASOURCE_USERNAME} --env DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD} --env POSTGRES_HOST=local-postgres --name sport-container-memory-settings -p8080:8080 --link local-postgres:postgres sport-memory-settings```
 
+###3. Run with volume (external application.yml)
+https://docs.docker.com/storage/bind-mounts/#start-a-container-with-a-bind-mount <br>
+```docker run --env SPRING_PROFILES_ACTIVE=docker --env DATASOURCE_USERNAME=${DATASOURCE_USERNAME} --env DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD} --name sport-container -p8080:8080 --link local-postgres:postgres -v "$(pwd)"/volume-sport-app:/config sport-image```
 
 ##Info about Docker images and containers
 ####To see images:
